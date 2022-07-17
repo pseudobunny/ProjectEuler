@@ -3,13 +3,6 @@
 version = 3
 
 [[package]]
-name = "LexicographicPermutations"
-version = "0.1.0"
-dependencies = [
- "itertools",
-]
-
-[[package]]
 name = "either"
 version = "1.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -22,4 +15,11 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a9a9d19fa1e79b6215ff29b9d6880b706147f16e9b1dbb1e4e5947b5b02bc5e3"
 dependencies = [
  "either",
+]
+
+[[package]]
+name = "lexicographic_permutations"
+version = "0.1.0"
+dependencies = [
+ "itertools",
 ]
