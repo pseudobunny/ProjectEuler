@@ -1,4 +1,5 @@
 use std::collections::HashSet;
+use std::cmp;
 
 fn digit_to_vec(num: u64) -> Vec<u64> {
     fn push_inner(n: u64, digits: &mut Vec<u64>) {
@@ -36,10 +37,6 @@ fn is_pandigital(n_a: &Vec<u64>) -> bool {
     set.len() == n_a.len()
 }
 
-fn max_u64(a: u64, b: u64) -> u64 {
-    if a > b { a } else { b }
-}
-
 fn main() {
     let mut n: u64 = 192;
     let mut max: u64 = 0;
@@ -65,7 +62,7 @@ fn main() {
         }
 
         if is_pandigital(&collect) {
-            max = max_u64(max, slice_to_int(&collect[..]))
+            max = cmp::max(max, slice_to_int(&collect[..]))
         }
     }
 
