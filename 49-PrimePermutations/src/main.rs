@@ -64,5 +64,5 @@ fn main() {
         } 
     }
     
-    println!("{:?}", results)
+    println!("{}{}{}", results[1][0], results[1][1], results[1][2])
 }
