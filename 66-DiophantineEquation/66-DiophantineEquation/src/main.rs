@@ -1,66 +1,55 @@
-// THIS CODE WILL NOT RUN
-// This is left here because it was a valiant attempt
-// Trying to make the Chakravala method work in rust for... very big numbers will probably be the
-// death of me.
-// If you are looking at this, look for the problem instead solved in julia.
+use num_bigint::{ ToBigInt, BigInt};
+use num::Signed;
+use num_traits::{Zero, One};
+use num_iter::range;
 
-// I may come back to this in the future, as an interesting problem to solve
+fn chakravala(a: BigInt, b: BigInt, k: BigInt, d: BigInt) -> (BigInt, BigInt) {
+    let (new_a, new_b, new_k) = next_triple
+        (
+            a.clone(),
+            b.clone(), 
+            k.clone(), 
+            find_min_m(a,b,k,d.clone()), 
+            d.clone()
+        );
 
-use num_bigint::ToBigInt;
-use std::cmp::Ordering;
-
-// This will be done with the Chakravala method
-// Should be fun
-fn find_minimum_x(d: u64) -> u64 {
-    // Find a solution a^2 - d*b^2 = k for any k found by any means
-    // We'll do this by just finding the first a that satisfies a^2 > d*1
-    // aka the ceiling of sqrt(d)
-    let d_sqrt = (d as f64).sqrt();
-    let mut a = d_sqrt.ceil() as u64;
-    let mut b = 1;
-    let mut k = a*a - d;
-
-    println!("{}", d);
-    
-    
-
-    let mut conv_list = SqrtConvergentsList::new(d);
-
-    let mut i = 0;
-    loop {
-        let (_, x, y) = conv_list.get(i);
-
-        let x2 = x*x;
-        let dy2 = d*y*y;
-        if x2.cmp(&dy2) == Ordering::Greater && x2 - dy2 == 1 {
-            return x;
-        }
-
-        i += 1;
+    if new_k != One::one() {
+        return chakravala(new_a, new_b, new_k, d); 
     }
+    
+    (new_a, new_b)
 }
 
-fn next_triple(a: u64, b: u64, k: u64) -> (u64, u64, u64) {
+fn next_triple(a: BigInt, b: BigInt, k: BigInt, m: BigInt, d: BigInt) -> (BigInt, BigInt, BigInt) {
+    let new_a = (a.clone()*m.clone() + d.clone()*b.clone()) / k.abs();
+    let new_b = (a + b*m.clone()) / k.abs();
+    let new_k = (m.clone()*m - d) / k;
 
+    (new_a, new_b, new_k)
 }
 
-fn find_min_m(a: u64, b: u64, k: u64, d: u64, d_sqrt: f64) -> u64 {
-    // now we need to choose an m such that (a+b*m)/k
-    // that also minimizes |m^2 - d|
-    // start at the first multiple of k that is greater than (or equal to) a+b
-    let k_mul = ((a+b) as f64 / k as f64).ceil() as u64 * k;
-    // just need to check what is left over after a
-    let mut k_mul_sub_a = k_mul - a;
-    let mut m = 1;
-    let mut min_val = 0.0;
+fn find_min_m(a: BigInt, b: BigInt, k: BigInt, d: BigInt) -> BigInt {
+    // Find the starting m
+    let mut start_m = Zero::zero();
+    for i in range(Zero::zero(),k.abs()) {
+        if (a.clone() + b.clone()*i.clone()) % k.clone() == Zero::zero() {
+            start_m = i.clone();
+        }        
+    }
 
-    // we want to check if we've crossed the zero point
-    let mut crossed = (m*m) as f64 > d_sqrt; 
-    loop {
-        if k_mul_sub_a % m == 0 {
-            
+    // Define search space
+    let m_to_search = (0..10).map(|i| i.to_bigint().unwrap())
+                             .map(|i| start_m.clone() + (i*k.clone()).abs());
+    
+    // Find the minimum
+    let mut least_m = start_m.clone();
+    for m in m_to_search {
+        if (m.clone()*m.clone() - d.clone()).abs() < (least_m.clone()*least_m.clone() - d.clone()).abs() {
+            least_m = m;
         }
     }
+
+    least_m
 }
 
 fn is_square(n: u64) -> bool {
@@ -114,11 +103,23 @@ fn is_square(n: u64) -> bool {
 //    }
 //}
 
+// because rust is weird
+fn big_int_one() -> BigInt {
+    One::one()
+}
+
+// Just to make the call in the map nicer
+fn chakravala_starter(n: BigInt) -> (BigInt, BigInt) {
+    chakravala(big_int_one(), big_int_one(), big_int_one() - n.clone(), n)
+}
+
 fn main() {
-    let non_squares: Vec<u64> = (2..=7).filter(|&n| !is_square(n)).collect();
+    let max = 1000;
+    let non_squares: Vec<u64> = (2..=max).filter(|&n| !is_square(n)).collect();
 
     let max_x = non_squares.iter()
-                           .map(|&n| (n, find_minimum_x(n)))
+                           .map(|i| i.to_bigint().unwrap())
+                           .map(|n| (n.clone(), chakravala_starter(n).0))
                            .max_by(|a, b| a.1.cmp(&b.1))
                            .unwrap()
                            .0;
