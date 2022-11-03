@@ -58,59 +58,9 @@ fn is_square(n: u64) -> bool {
     (n_sqrt - n_sqrt.trunc()).abs() < 5e-5
 }
 
-// Attempting to find the fundamental solution killed the program
-// This was... not the correct way to efficiently do this.
-// But IT TOOK ME TIME TO UNDERSTAND so it stays
-//struct SqrtConvergentsList {
-//    a: Vec<u64>,
-//    curr_x: f64, // The previous "x" in the calculation
-//    h: Vec<u64>,
-//    k: Vec<u64>,
-//}
-
-//impl SqrtConvergentsList {
-//    fn new(x: u64) -> SqrtConvergentsList {
-//        let mut curr_x = (x as f64).sqrt();
-//        let a0 = curr_x.trunc() as u64;
-//        curr_x = 1.0 / (curr_x - a0 as f64);
-//        let a1 = curr_x.trunc() as u64;
-//
-//        SqrtConvergentsList {
-//            a: vec![a0, a1],
-//            curr_x,
-//            h: vec![a0, a1*a0 + 1],
-//            k: vec![1, a1],
-//        } 
-//    }
-
-//    fn extend(&mut self) {
-//        self.curr_x = 1.0 / (self.curr_x - *self.a.last().unwrap() as f64);
-//        self.a.push(self.curr_x.trunc() as u64);
-//        
-//        let curr_a = *self.a.last().unwrap();
-//        let hk_len = self.h.len();
-//
-//        self.h.push(curr_a*self.h[hk_len-1] + self.h[hk_len-2]);
-//        self.k.push(curr_a*self.k[hk_len-1] + self.k[hk_len-2]);
-//    }
-
-//    fn get(&mut self, i: usize) -> (u64, u64, u64) {
-//        while i >= self.a.len() {
-//            self.extend();
-//        }
-
-//        (self.a[i], self.h[i], self.k[i]) 
-//    }
-//}
-
-// because rust is weird
-fn big_int_one() -> BigInt {
-    One::one()
-}
-
 // Just to make the call in the map nicer
 fn chakravala_starter(n: BigInt) -> (BigInt, BigInt) {
-    chakravala(big_int_one(), big_int_one(), big_int_one() - n.clone(), n)
+    chakravala(One::one(), One::one(), 1 - n.clone(), n)
 }
 
 fn main() {
