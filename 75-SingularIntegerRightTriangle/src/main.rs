@@ -45,14 +45,13 @@ fn main() {
                 break;
             }
 
-            triplets.insert(new_trip); 
-            
+            triplets.insert(new_trip);
+
             i += 1;
         }
     }
     
-    let mut trip_sums = triplets.iter().map(|t| trip_sum(*t)).collect::<Vec<u64>>();
-    trip_sums.sort();
+    let trip_sums = triplets.iter().map(|t| trip_sum(*t)).collect::<Vec<u64>>();
 
     let mut single_sums_set = HashSet::new();
     let mut mul_sums_set = HashSet::new();
