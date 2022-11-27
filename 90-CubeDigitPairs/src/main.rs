@@ -1,6 +1,5 @@
 use itertools::Itertools;
 use std::collections::HashSet;
-use lazy_static::lazy_static;
 use std::iter::once;
 
 fn extend_set(set: &[u64]) -> Vec<u64> {
@@ -16,9 +15,6 @@ fn extend_set(set: &[u64]) -> Vec<u64> {
 }
 
 const SQUARES: [u64; 9] = [1,4,9,16,25,36,49,64,81];
-lazy_static! {
-    static ref SQUARE_SET: HashSet<u64> = HashSet::from_iter(SQUARES.iter().cloned());
-}
 const SQUARE_DIGITS: [(u64,u64); 9] = [
     (0,1),
     (0,4),
@@ -115,9 +111,10 @@ fn check_if_sets_match(a: &[u64], b: &[u64]) -> bool {
 
     let created_digits = a_e.iter()
         .flat_map(|a_n| b_e.iter().map(|b_n| (*a_n, *b_n)).collect::<Vec<(u64, u64)>>())
-        .flat_map(|(a,b)| vec![a*10 + b, b*10 + a]);
+        .flat_map(|(a,b)| vec![a*10 + b, b*10 + a])
+        .collect::<Vec<u64>>();
 
-    SQUARE_SET.intersection(&HashSet::from_iter(created_digits)).copied().collect::<HashSet<u64>>() == *SQUARE_SET
+    SQUARES.iter().all(|d| created_digits.contains(d))
 }
 
 fn main() {
