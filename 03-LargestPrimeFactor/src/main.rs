@@ -24,3 +24,18 @@ fn prime_factors(n: u64) -> u64 {
 fn main() {
     println!("{}", prime_factors(600851475143))
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn base_case() {
+        assert_eq!(prime_factors(13195), 29)
+    }
+
+    #[test]
+    fn q_case() {
+        assert_eq!(prime_factors(600851475143), 6857)
+    }
+}
