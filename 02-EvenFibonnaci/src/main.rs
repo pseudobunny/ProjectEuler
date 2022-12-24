@@ -3,8 +3,8 @@ fn update_euler(x: (u32, u32)) -> (u32, u32) {
 }
 
 fn sum_even_below(n: u32) -> u32 {
-    let mut fib_pair : (u32, u32) = (1, 2);
-    let mut fib_sum : u32 = 2;
+    let mut fib_pair: (u32, u32) = (1, 2);
+    let mut fib_sum: u32 = 2;
 
     while fib_pair.1 < n {
         fib_pair = update_euler(fib_pair);
