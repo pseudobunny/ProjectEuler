@@ -3,5 +3,12 @@
 version = 3
 
 [[package]]
+name = "custom_math_utilities"
+version = "0.1.0"
+
+[[package]]
 name = "palindrome_product"
 version = "0.1.0"
+dependencies = [
+ "custom_math_utilities",
+]

@@ -16,6 +16,13 @@ pub fn check_primality(n: u64) -> bool {
     true
 }
 
+pub fn check_palindrome(x: u64) -> bool {
+    let x_str = x.to_string();
+    let n = x_str.len() / 2;
+
+    x_str.bytes().take(n).eq(x_str.bytes().rev().take(n))
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -23,5 +30,10 @@ mod tests {
     #[test]
     fn test_primeality() {
         assert!(check_primality(104743));
+    }
+
+    #[test]
+    fn test_palindrome() {
+        assert!(check_palindrome(10001));
     }
 }

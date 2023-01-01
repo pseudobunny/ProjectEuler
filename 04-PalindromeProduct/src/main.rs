@@ -1,11 +1,6 @@
-fn check_palindrome(x: u32) -> bool {
-    let x_str = x.to_string();
-    let n = x_str.len() / 2;
+use custom_math_utilities::check_palindrome;
 
-    x_str.bytes().take(n).eq(x_str.bytes().rev().take(n))
-}
-
-fn max_palindrome(min: u32, max: u32) -> u32 {
+fn max_palindrome(min: u64, max: u64) -> u64 {
     let mut max_palindrome = 0;
 
     let max_num = max * max;
@@ -19,8 +14,6 @@ fn max_palindrome(min: u32, max: u32) -> u32 {
 
                 if (curr_num % curr_factor == 0) && (second_factor < max && second_factor >= min) {
                     max_palindrome = curr_num;
-                    println!("{}", curr_factor);
-                    println!("{}", second_factor);
                     break;
                 }
             }
