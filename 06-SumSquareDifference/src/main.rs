@@ -1,16 +1,9 @@
 fn sum_of_squares(start: u32, end: u32) -> u32 {
-    let mut sum = 0;
-    for i in start..=end {
-        sum += i * i;
-    }
-    sum
+    (start..=end).map(|n| n * n).sum::<u32>()
 }
 
 fn square_of_sum(start: u32, end: u32) -> u32 {
-    let mut sum = 0;
-    for i in start..=end {
-        sum += i;
-    }
+    let sum = (start..=end).sum::<u32>();
     sum * sum
 }
 
