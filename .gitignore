@@ -2,3 +2,8 @@
 */*/target/
 recoverykey.txt
 
+
+
+# Added by cargo
+
+/target
