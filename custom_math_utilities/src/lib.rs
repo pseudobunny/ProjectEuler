@@ -23,6 +23,10 @@ pub fn check_palindrome(x: u64) -> bool {
     x_str.bytes().take(n).eq(x_str.bytes().rev().take(n))
 }
 
+pub fn check_if_whole(n: f32) -> bool {
+    (n - n.trunc()).abs() < 0.00001_f32
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -35,5 +39,11 @@ mod tests {
     #[test]
     fn test_palindrome() {
         assert!(check_palindrome(10001));
+    }
+
+    #[test]
+    fn test_if_whole() {
+        assert!(check_if_whole(0.999999999999));
+        assert!(check_if_whole(1.000000000034453));
     }
 }
