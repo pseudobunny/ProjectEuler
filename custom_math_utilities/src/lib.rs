@@ -1,16 +1,20 @@
-pub fn check_primality(n: u64) -> bool {
-    if n == 2 || n == 3 {
+use num::{Num, NumCast};
+
+pub fn check_primality<N: Num + NumCast + PartialOrd + Copy>(n: N) -> bool {
+    let nums: Vec<N> = (0..=6).map(|n| NumCast::from(n).unwrap()).collect();
+
+    if n == nums[2] || n == nums[3] {
         return true;
     }
-    if n <= 1 || n % 2 == 0 || n % 3 == 0 {
+    if n <= nums[1] || n % nums[2] == nums[0] || n % nums[3] == nums[0] {
         return false;
     }
-    let mut d = 5;
+    let mut d = nums[5];
     while d * d <= n {
-        if n % d == 0 || n % (d + 2) == 0 {
+        if n % d == nums[0] || n % (d + nums[2]) == nums[0] {
             return false;
         }
-        d += 6;
+        d = d + nums[6];
     }
 
     true
@@ -33,7 +37,8 @@ mod tests {
 
     #[test]
     fn test_primeality() {
-        assert!(check_primality(104743));
+        assert!(check_primality(104743_u64));
+        assert!(check_primality(104743_i64));
     }
 
     #[test]
