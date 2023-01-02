@@ -1,20 +1,13 @@
-fn check_adjacent(num: usize, digits: &[u32]) -> u64 {
-    let mut max_prod = 0;
-    let mut curr_prod: u64;
-    for i in 0..digits.len() - num {
-        curr_prod = 1;
-        for j in 0..num {
-            curr_prod *= digits[i + j] as u64;
-        }
-        if curr_prod > max_prod {
-            max_prod = curr_prod;
-        }
-    }
-
-    max_prod
+fn check_adjacent(num: usize, digits: &[u64]) -> u64 {
+    digits
+        .to_vec()
+        .windows(num)
+        .map(|w| w.iter().product())
+        .max()
+        .unwrap()
 }
 
-const thousand_digit: [u32; 1000] = vec![
+const THOUSAND_DIGIT: [u64; 1000] = [
     7, 3, 1, 6, 7, 1, 7, 6, 5, 3, 1, 3, 3, 0, 6, 2, 4, 9, 1, 9, 2, 2, 5, 1, 1, 9, 6, 7, 4, 4, 2, 6,
     5, 7, 4, 7, 4, 2, 3, 5, 5, 3, 4, 9, 1, 9, 4, 9, 3, 4, 9, 6, 9, 8, 3, 5, 2, 0, 3, 1, 2, 7, 7, 4,
     5, 0, 6, 3, 2, 6, 2, 3, 9, 5, 7, 8, 3, 1, 8, 0, 1, 6, 9, 8, 4, 8, 0, 1, 8, 6, 9, 4, 7, 8, 8, 5,
@@ -50,5 +43,20 @@ const thousand_digit: [u32; 1000] = vec![
 ];
 
 fn main() {
-    println!("{}", check_adjacent(13, &thousand_digit))
+    println!("{}", check_adjacent(13, &THOUSAND_DIGIT))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn base_case() {
+        assert_eq!(check_adjacent(4, &THOUSAND_DIGIT), 5832)
+    }
+
+    #[test]
+    fn q_case() {
+        assert_eq!(check_adjacent(13, &THOUSAND_DIGIT), 23514624000)
+    }
 }
