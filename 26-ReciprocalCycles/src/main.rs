@@ -1,34 +1,16 @@
-use num_bigint::{ToBigUint};
-use num_traits::One;
-
-fn check_primality(n: u64) -> bool {
-    if n == 2 || n == 3 {
-        return true;
-    }
-    if n <= 1 || n % 2 == 0 || n %3 == 0 {
-        return false;
-    }
-    let mut d = 5;
-    while d*d <= n {
-        if n % d == 0 || n % (d + 2) == 0 {
-            return false;
-        }
-        d += 6;
-    }
-
-    return true;
-}
+use custom_math_utilities::check_primality;
+use num::BigUint;
 
 fn get_order(p: u64) -> u64 {
     let mut k = 1;
-    let big_uint_ten = 10.to_biguint().expect("");
-    let mut curr_mult = 10.to_biguint().expect("");
+    let big_uint_ten = BigUint::from(10_u64);
+    let mut curr_mult = BigUint::from(10_u64);
 
     let mut r;
     loop {
         r = &curr_mult % p;
-        
-        if r == One::one() {
+
+        if r == BigUint::from(1_u64) {
             break;
         }
 
@@ -39,20 +21,26 @@ fn get_order(p: u64) -> u64 {
     k
 }
 
-fn main() {
-    let mut max_order = 0;
-    let mut max_d = 0;
-
-    let mut order: u64;
-    for d in 95..1000 {
-        if check_primality(d) {
-            order = get_order(d);
-            if order > max_order {
-                max_order = order;
-                max_d = d;
-            }
-        }
-    }
-
-    println!("{}", max_d)
+fn denom_with_longest_recurring_cycle() -> u64 {
+    (95..1000)
+        .filter(|&d| check_primality(d))
+        .map(|d| (get_order(d), d))
+        .max_by(|a, b| a.0.cmp(&b.0))
+        .unwrap()
+        .1
 }
+
+fn main() {
+    println!("{}", denom_with_longest_recurring_cycle())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn q_case() {
+        assert_eq!(denom_with_longest_recurring_cycle(), 983)
+    }
+}
+
