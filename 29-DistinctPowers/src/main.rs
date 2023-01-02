@@ -1,14 +1,29 @@
+use num::BigUint;
 use std::collections::HashSet;
-use num_bigint::ToBigUint;
+
+fn num_distinct_powers(max_a: u32, max_b: u32) -> usize {
+    let d_powers = (2..=max_a)
+        .map(|a| BigUint::from(a))
+        .flat_map(|a| (2..=max_b).map(|b| a.pow(b)).collect::<Vec<BigUint>>());
+
+    HashSet::<BigUint>::from_iter(d_powers).len()
+}
 
 fn main() {
-    let mut d_powers = HashSet::new();
+    println!("{}", num_distinct_powers(100, 100))
+}
 
-    for a in 2..=100 {
-        for b in 2..=100 {
-            d_powers.insert(a.to_biguint().expect("").pow(b));
-        }
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn base_case() {
+        assert_eq!(num_distinct_powers(5, 5), 15)
     }
 
-    println!("{}", d_powers.len())
+    #[test]
+    fn q_case() {
+        assert_eq!(num_distinct_powers(100, 100), 9183)
+    }
 }
