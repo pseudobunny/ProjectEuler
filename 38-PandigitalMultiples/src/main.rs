@@ -1,5 +1,5 @@
-use std::collections::HashSet;
 use custom_math_utilities::{digits_to_num, num_to_digits};
+use std::collections::HashSet;
 
 fn is_pandigital(n_a: &Vec<u64>) -> bool {
     HashSet::<u64>::from_iter(n_a.iter().copied()).len() == n_a.len()
@@ -9,7 +9,7 @@ fn digits_for_pandigital_construction(n: u64) -> Vec<u64> {
     let mut collect: Vec<u64> = vec![];
     let mut m: u64 = 1;
     loop {
-        let a = num_to_digits(n*m);
+        let a = num_to_digits(n * m);
         collect = [a, collect].concat();
 
         if collect.len() > 8 {
