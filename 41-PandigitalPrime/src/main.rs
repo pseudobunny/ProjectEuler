@@ -1,49 +1,36 @@
+use custom_math_utilities::{check_primality, digits_to_num};
 use itertools::Itertools;
-use std::cmp;
 
-fn check_primality(n: u64) -> bool {
-    if n == 2 || n == 3 {
-        return true;
-    }
-    if n <= 1 || n % 2 == 0 || n %3 == 0 {
-        return false;
-    }
-    let mut d = 5;
-    while d*d <= n {
-        if n % d == 0 || n % (d + 2) == 0 {
-            return false;
-        }
-        d += 6;
-    }
+const DIGITS : [u64; 9] = [1,2,3,4,5,6,7,8,9];
 
-    true
+fn generate_permutations(i: usize) -> Vec<Vec<u64>> {
+    DIGITS[0..i]
+            .iter()
+            .permutations(i)
+            .unique()
+            .map(|v| v.into_iter().copied().collect::<Vec<u64>>())
+            .collect()
 }
 
-fn slice_to_int(n_a: &[&u64]) -> u64 {
-    let mut t = 1;
-    let mut n = 0;
-    for n_d in n_a.iter().rev() {
-        n += *n_d*t;
-        t *= 10;
-    }
-
-    n
+fn pandigital_prime_one_to(n: usize) -> u64 {
+    (1..n)
+        .flat_map(|i| generate_permutations(i))
+        .map(|perm| digits_to_num(&perm))
+        .filter(|&n| check_primality(n))
+        .max()
+        .unwrap()
 }
 
 fn main() {
-    let mut max = 0;
-    let mut digits = vec![];
+    println!("{}", pandigital_prime_one_to(9))
+}
 
-    for i in 1..=9 {
-        digits.push(i);
-        
-        for perm in digits.iter().permutations(digits.len()).unique() {
-            let num = slice_to_int(&perm[..]);
-            if check_primality(num) {
-                max = cmp::max(max, num);
-            }
-        }
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn q_case() {
+        assert_eq!(pandigital_prime_one_to(9), 7652413);
     }
-
-    println!("{}", max)
 }
