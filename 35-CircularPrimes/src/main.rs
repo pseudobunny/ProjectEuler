@@ -14,7 +14,7 @@ fn check_primality_all_rotations(n: u64) -> bool {
                 .copied()
                 .collect::<Vec<u64>>()
         })
-        .map(|v| digits_to_num(v))
+        .map(|v| digits_to_num(&v))
         .filter(|&n| check_primality(n))
         .count();
 

@@ -1,70 +1,46 @@
 use std::collections::HashSet;
-use std::cmp;
-
-fn digit_to_vec(num: u64) -> Vec<u64> {
-    fn push_inner(n: u64, digits: &mut Vec<u64>) {
-        digits.push(n % 10);
-
-        if n >= 10 {
-            push_inner(n/10, digits);
-        }
-    }
-    
-    let mut digits: Vec<u64> = vec![];
-    push_inner(num, &mut digits);
-
-    digits.into_iter().rev().collect()
-}
-
-fn slice_to_int(n_a: &[u64]) -> u64 {
-    let mut t = 1;
-    let mut n = 0;
-    for n_d in n_a.iter().rev() {
-        n += *n_d*t;
-        t *= 10;
-    }
-
-    n
-}
+use custom_math_utilities::{digits_to_num, num_to_digits};
 
 fn is_pandigital(n_a: &Vec<u64>) -> bool {
-    let mut set = HashSet::new();
+    HashSet::<u64>::from_iter(n_a.iter().copied()).len() == n_a.len()
+}
 
-    for n in n_a.iter() {
-        set.insert(n);
+fn digits_for_pandigital_construction(n: u64) -> Vec<u64> {
+    let mut collect: Vec<u64> = vec![];
+    let mut m: u64 = 1;
+    loop {
+        let a = num_to_digits(n*m);
+        collect = [a, collect].concat();
+
+        if collect.len() > 8 {
+            break;
+        }
+
+        m += 1;
     }
 
-    set.len() == n_a.len()
+    collect
+}
+
+fn max_pandigital() -> u64 {
+    (192..100_000)
+        .map(|n| digits_for_pandigital_construction(n))
+        .filter(|v| !v.contains(&0) && is_pandigital(v))
+        .map(|v| digits_to_num(&v))
+        .max()
+        .unwrap()
 }
 
 fn main() {
-    let mut n: u64 = 192;
-    let mut max: u64 = 0;
+    println!("{}", max_pandigital())
+}
 
-    while n < 100_000 {
-        let mut collect: Vec<u64> = vec![];
-        let mut m: u64 = 1;
-        loop {
-            let mut a = digit_to_vec(n*m);
-            collect.append(&mut a);
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-            if collect.len() > 8 {
-                break;
-            }
-
-            m += 1;
-        }
-        
-        n += 1;
-        
-        if collect.contains(&0) {
-            continue;
-        }
-
-        if is_pandigital(&collect) {
-            max = cmp::max(max, slice_to_int(&collect[..]))
-        }
+    #[test]
+    fn test_sum_double_palindrome() {
+        assert_eq!(max_pandigital(), 932718654);
     }
-
-    println!("{}", max)
 }

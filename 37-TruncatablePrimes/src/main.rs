@@ -10,14 +10,14 @@ fn check_truncated(n: u64) -> bool {
 
     let count_from_right = (1..l)
         .map(|i| digits.iter().skip(i).copied().collect::<Vec<u64>>())
-        .map(|v| digits_to_num(v))
+        .map(|v| digits_to_num(&v))
         .filter(|n| check_primality(*n))
         .count();
 
     let count_from_left = (1..l)
         .rev()
         .map(|i| digits.iter().take(i).copied().collect::<Vec<u64>>())
-        .map(|v| digits_to_num(v))
+        .map(|v| digits_to_num(&v))
         .filter(|n| check_primality(*n))
         .count();
 

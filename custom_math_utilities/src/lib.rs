@@ -48,7 +48,7 @@ pub fn num_to_digits<N: Num + NumCast + PartialOrd + Copy>(num: N) -> Vec<N> {
     digits
 }
 
-pub fn digits_to_num<N: Num + NumCast + PartialOrd + Copy + Sum>(digits: Vec<N>) -> N {
+pub fn digits_to_num<N: Num + NumCast + PartialOrd + Copy + Sum>(digits: &[N]) -> N {
     digits
         .iter()
         .enumerate()
@@ -58,12 +58,12 @@ pub fn digits_to_num<N: Num + NumCast + PartialOrd + Copy + Sum>(digits: Vec<N>)
 
 pub fn digits_to_num_filter_ind<N: Num + NumCast + PartialOrd + Copy + Sum>(digits: &[N], ind: usize) -> N {
     digits_to_num(
-        digits
+        &digits
             .iter()
             .enumerate()
             .filter(|(i, _)| *i != ind)
             .map(|(_, n)| *n)
-            .collect(),
+            .collect::<Vec<N>>(),
     )
 }
 
@@ -114,7 +114,7 @@ mod tests {
 
     #[test]
     fn test_digits_to_num() {
-        assert_eq!(digits_to_num(vec![1,2,3,4,5,6]), 654321)
+        assert_eq!(digits_to_num(&vec![1,2,3,4,5,6]), 654321)
     }
 
     #[test]
