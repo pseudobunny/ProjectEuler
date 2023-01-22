@@ -26,7 +26,7 @@ mod tests {
     }
 
     #[test]
-    fn test_sum_double_palindrome() {
+    fn q_case() {
         assert_eq!(sum_double_palindromes_below(1_000_000), 872187);
     }
 }

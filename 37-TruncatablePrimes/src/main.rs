@@ -57,7 +57,7 @@ mod tests {
     }
 
     #[test]
-    fn test_sum_double_palindrome() {
+    fn q_case() {
         assert_eq!(sum_truncatable_primes(), 748317);
     }
 }

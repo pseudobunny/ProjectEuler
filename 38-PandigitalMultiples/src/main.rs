@@ -40,7 +40,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_sum_double_palindrome() {
+    fn q_case() {
         assert_eq!(max_pandigital(), 932718654);
     }
 }
