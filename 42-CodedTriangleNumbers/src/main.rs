@@ -2,6 +2,7 @@ use std::{
     fs::File,
     io::{prelude::*, BufReader},
 };
+use custom_math_utilities::triangle_number_list;
 
 fn lines_from_file(filename: &str) -> Vec<String> {
     let file = File::open(filename)
@@ -26,41 +27,28 @@ fn convert_word_to_sum(word: &str) -> u8 {
         .sum()
 }
 
-fn generate_triangle_num(n: i32) -> i32 {
-     (n * (n+1)) / 2
-} 
-
-struct TriangleNumberList {
-    list: Vec<i32>
-}
-
-impl TriangleNumberList {
-    fn new() -> TriangleNumberList {
-        TriangleNumberList{ list: vec![1, 3, 6, 10, 15, 21, 28, 36, 45, 55] }
-    }
-
-    fn extend(&mut self) {
-        let new_tri_num = generate_triangle_num(self.list.len() as i32 + 1);
-        self.list.push(new_tri_num);
-    }
-
-    fn is_in(&mut self, n: i32) -> bool {
-        while self.list.last().unwrap() < &n {
-           self.extend(); 
-        }
-
-        self.list.contains(&n)
-    }
+fn triangle_names_in_file_count(filename: &str) -> usize {
+    let input_lines = lines_from_file(filename);
+    
+    let mut tri_list = triangle_number_list(); 
+    
+    word_line_to_names(&input_lines[0])
+        .into_iter()             
+        .map(|w| convert_word_to_sum(&w) as u64) // convert to sum
+        .filter(|s| tri_list.is_in(*s)) // filter out words that aren't triangle numbers  
+        .count()
 }
 
 fn main() {
-    let input_lines = lines_from_file("p042_words.txt");
-    
-    let mut tri_list = TriangleNumberList::new(); 
-    let input_sums_that_are_tri = word_line_to_names(&input_lines[0])
-        .into_iter()             
-        .map(|w| convert_word_to_sum(&w) as i32) // convert to sum
-        .filter(|s| tri_list.is_in(*s)); // filter out words that aren't triangle numbers    
+    println!("{}", triangle_names_in_file_count("p042_words.txt"))
+}
 
-    println!("{}", input_sums_that_are_tri.count())
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn q_case() {
+        assert_eq!(triangle_names_in_file_count("p042_words.txt"), 162);
+    }
 }

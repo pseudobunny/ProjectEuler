@@ -1,6 +1,16 @@
 use core::iter::Sum;
 use num::{traits::Pow, Num, NumCast, Float};
 
+// PULL IN SUBMODULES
+
+pub mod generated_func_list;
+pub use crate::generated_func_list::GeneratedFuncList;
+pub use crate::generated_func_list::triangle_number_list;
+pub use crate::generated_func_list::penta_number_list;
+pub use crate::generated_func_list::hexa_number_list;
+
+// GENERAL USEFUL FUNCTIONS (probably break into their own files eventually)
+
 pub fn check_primality<N: Num + NumCast + PartialOrd + Copy>(n: N) -> bool {
     let nums: Vec<N> = (0..=6).map(|n| NumCast::from(n).unwrap()).collect();
 
