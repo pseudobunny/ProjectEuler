@@ -1,15 +1,15 @@
 use custom_math_utilities::{check_primality, digits_to_num};
 use itertools::Itertools;
 
-const DIGITS : [u64; 9] = [1,2,3,4,5,6,7,8,9];
+const DIGITS: [u64; 9] = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 fn generate_permutations(i: usize) -> Vec<Vec<u64>> {
     DIGITS[0..i]
-            .iter()
-            .permutations(i)
-            .unique()
-            .map(|v| v.into_iter().copied().collect::<Vec<u64>>())
-            .collect()
+        .iter()
+        .permutations(i)
+        .unique()
+        .map(|v| v.into_iter().copied().collect::<Vec<u64>>())
+        .collect()
 }
 
 fn pandigital_prime_one_to(n: usize) -> u64 {
