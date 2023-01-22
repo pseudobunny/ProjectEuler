@@ -1,9 +1,7 @@
-use custom_math_utilities::triangle_number_list;
-use custom_math_utilities::penta_number_list;
-use custom_math_utilities::hexa_number_list;
+use custom_math_utilities::{hexa_number_list, penta_number_list, triangle_number_list};
 
 fn first_tri_penta_hexa_after_ind(n: usize) -> u64 {
-    let mut tri_list  = triangle_number_list();
+    let mut tri_list = triangle_number_list();
     let mut penta_list = penta_number_list();
     let mut hexa_list = hexa_number_list();
 
@@ -19,7 +17,7 @@ fn first_tri_penta_hexa_after_ind(n: usize) -> u64 {
     }
 }
 
-fn main () {
+fn main() {
     println!("{}", first_tri_penta_hexa_after_ind(286))
 }
 
