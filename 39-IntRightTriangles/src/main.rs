@@ -3,9 +3,9 @@ use custom_math_utilities::check_if_whole;
 fn solution_num_for_perimeter(n: u64) -> usize {
     let f_n = n as f64;
 
-    (1..(n/3))
+    (1..(n / 3))
         .map(|x| x as f64)
-        .map(|x| (f_n*0.5 - x) / (1.0 - (x / f_n))) // calculate the y required to satisfy this equation
+        .map(|x| (f_n * 0.5 - x) / (1.0 - (x / f_n))) // calculate the y required to satisfy this equation
         .filter(|&y| check_if_whole(y))
         .count()
 }
