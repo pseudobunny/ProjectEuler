@@ -56,7 +56,10 @@ pub fn digits_to_num<N: Num + NumCast + PartialOrd + Copy + Sum>(digits: &[N]) -
         .sum()
 }
 
-pub fn digits_to_num_filter_ind<N: Num + NumCast + PartialOrd + Copy + Sum>(digits: &[N], ind: usize) -> N {
+pub fn digits_to_num_filter_ind<N: Num + NumCast + PartialOrd + Copy + Sum>(
+    digits: &[N],
+    ind: usize,
+) -> N {
     digits_to_num(
         &digits
             .iter()
@@ -69,13 +72,13 @@ pub fn digits_to_num_filter_ind<N: Num + NumCast + PartialOrd + Copy + Sum>(digi
 
 pub fn to_base(n: u32, base: u32) -> String {
     let mut result = vec![];
-    let mut n = n; // get a copy of n but mutable 
+    let mut n = n; // get a copy of n but mutable
 
     loop {
-        let m = n%base;
-        n = n/base;
+        let m = n % base;
+        n = n / base;
 
-        result.push(std::char::from_digit(m,base).unwrap());
+        result.push(std::char::from_digit(m, base).unwrap());
         if n == 0 {
             break;
         }
@@ -114,12 +117,12 @@ mod tests {
 
     #[test]
     fn test_digits_to_num() {
-        assert_eq!(digits_to_num(&vec![1,2,3,4,5,6]), 654321)
+        assert_eq!(digits_to_num(&vec![1, 2, 3, 4, 5, 6]), 654321)
     }
 
     #[test]
     fn test_digits_to_num_filter_ind() {
-        assert_eq!(digits_to_num_filter_ind(&vec![1,2,3,4,5,6], 1), 65431)
+        assert_eq!(digits_to_num_filter_ind(&vec![1, 2, 3, 4, 5, 6], 1), 65431)
     }
 
     #[test]
