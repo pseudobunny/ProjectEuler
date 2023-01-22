@@ -1,5 +1,5 @@
 use core::iter::Sum;
-use num::{traits::Pow, Num, NumCast};
+use num::{traits::Pow, Num, NumCast, Float};
 
 pub fn check_primality<N: Num + NumCast + PartialOrd + Copy>(n: N) -> bool {
     let nums: Vec<N> = (0..=6).map(|n| NumCast::from(n).unwrap()).collect();
@@ -28,8 +28,8 @@ pub fn check_palindrome(x: u64) -> bool {
     x_str.bytes().take(n).eq(x_str.bytes().rev().take(n))
 }
 
-pub fn check_if_whole(n: f32) -> bool {
-    (n - n.trunc()).abs() < 0.00001_f32
+pub fn check_if_whole<F: Float>(n: F) -> bool {
+    (n - n.trunc()).abs() < NumCast::from(0.00001).unwrap()
 }
 
 pub fn num_to_digits<N: Num + NumCast + PartialOrd + Copy>(num: N) -> Vec<N> {
