@@ -67,6 +67,23 @@ pub fn digits_to_num_filter_ind<N: Num + NumCast + PartialOrd + Copy + Sum>(digi
     )
 }
 
+pub fn to_base(n: u32, base: u32) -> String {
+    let mut result = vec![];
+    let mut n = n; // get a copy of n but mutable 
+
+    loop {
+        let m = n%base;
+        n = n/base;
+
+        result.push(std::char::from_digit(m,base).unwrap());
+        if n == 0 {
+            break;
+        }
+    }
+
+    result.into_iter().rev().collect()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -103,5 +120,10 @@ mod tests {
     #[test]
     fn test_digits_to_num_filter_ind() {
         assert_eq!(digits_to_num_filter_ind(&vec![1,2,3,4,5,6], 1), 65431)
+    }
+
+    #[test]
+    fn test_to_base() {
+        assert_eq!(to_base(7, 2), "111"); // have only needed base 2 so far
     }
 }
