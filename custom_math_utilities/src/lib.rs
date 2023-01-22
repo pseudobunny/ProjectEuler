@@ -1,4 +1,5 @@
-use num::{Num, NumCast};
+use core::iter::Sum;
+use num::{traits::Pow, Num, NumCast};
 
 pub fn check_primality<N: Num + NumCast + PartialOrd + Copy>(n: N) -> bool {
     let nums: Vec<N> = (0..=6).map(|n| NumCast::from(n).unwrap()).collect();
@@ -31,6 +32,41 @@ pub fn check_if_whole(n: f32) -> bool {
     (n - n.trunc()).abs() < 0.00001_f32
 }
 
+pub fn num_to_digits<N: Num + NumCast + PartialOrd + Copy>(num: N) -> Vec<N> {
+    let ten: N = NumCast::from(10).unwrap();
+
+    fn ntd_inner<N: Num + NumCast + PartialOrd + Copy>(n: N, digits: &mut Vec<N>, ten_inner: N) {
+        digits.push(n % ten_inner);
+        if n >= ten_inner {
+            ntd_inner(n / ten_inner, digits, ten_inner);
+        }
+    }
+
+    let mut digits = vec![];
+    ntd_inner(num, &mut digits, ten);
+
+    digits
+}
+
+pub fn digits_to_num<N: Num + NumCast + PartialOrd + Copy + Sum>(digits: Vec<N>) -> N {
+    digits
+        .iter()
+        .enumerate()
+        .map(|(i, n)| *n * NumCast::from(10.pow(i as u32)).unwrap())
+        .sum()
+}
+
+pub fn digits_to_num_filter_ind<N: Num + NumCast + PartialOrd + Copy + Sum>(digits: &[N], ind: usize) -> N {
+    digits_to_num(
+        digits
+            .iter()
+            .enumerate()
+            .filter(|(i, _)| *i != ind)
+            .map(|(_, n)| *n)
+            .collect(),
+    )
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -50,5 +86,22 @@ mod tests {
     fn test_if_whole() {
         assert!(check_if_whole(0.999999999999));
         assert!(check_if_whole(1.000000000034453));
+    }
+
+    #[test]
+    fn test_num_to_digits() {
+        for i_num in num_to_digits(123456).iter().rev().enumerate() {
+            assert_eq!(i_num.0 + 1, *i_num.1);
+        }
+    }
+
+    #[test]
+    fn test_digits_to_num() {
+        assert_eq!(digits_to_num(vec![1,2,3,4,5,6]), 654321)
+    }
+
+    #[test]
+    fn test_digits_to_num_filter_ind() {
+        assert_eq!(digits_to_num_filter_ind(&vec![1,2,3,4,5,6], 1), 65431)
     }
 }
