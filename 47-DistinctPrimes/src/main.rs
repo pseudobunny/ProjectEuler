@@ -24,13 +24,12 @@ fn prime_factorization_set(n: u64) -> HashSet<u64> {
     prime_set
 }
 
-fn main() {
+fn consecutive_distinct_factors(distinct: usize) -> Vec<u64> {
     let mut consecutive = vec![];
 
-    let target = 4;
     let mut i = 2;
-    while consecutive.len() < target {
-        if prime_factorization_set(i).len() == target {
+    while consecutive.len() < distinct {
+        if prime_factorization_set(i).len() == distinct {
             consecutive.push(i);
         } else {
             consecutive.clear()
@@ -39,5 +38,25 @@ fn main() {
         i += 1;
     }
 
-    println!("{:?}", consecutive)
+    consecutive
+}
+
+fn main() {
+    println!("{:?}", consecutive_distinct_factors(4)[0])
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn base_case() {
+        assert_eq!(consecutive_distinct_factors(2)[0], 14);
+        assert_eq!(consecutive_distinct_factors(3)[0], 644);
+    }
+
+    #[test]
+    fn q_case() {
+        assert_eq!(consecutive_distinct_factors(4)[0], 134043);
+    }
 }
