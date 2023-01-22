@@ -4,10 +4,10 @@ fn check_truncated(n: u64) -> bool {
     if !check_primality(n) {
         return false;
     }
-    
+
     let digits = num_to_digits(n);
     let l = digits.len();
-    
+
     let count_from_right = (1..l)
         .map(|i| digits.iter().skip(i).copied().collect::<Vec<u64>>())
         .map(|v| digits_to_num(v))
@@ -21,7 +21,7 @@ fn check_truncated(n: u64) -> bool {
         .filter(|n| check_primality(*n))
         .count();
 
-    count_from_left == l-1 && count_from_right == l-1
+    count_from_left == l - 1 && count_from_right == l - 1
 }
 
 fn sum_truncatable_primes() -> u64 {
