@@ -1,6 +1,4 @@
-fn gen_triangle_number(n: u64) -> u64 {
-    (n * (n + 1)) / 2
-}
+use custom_math_utilities::triangle_number_list;
 
 fn calc_divisor_num(n: u64) -> u64 {
     let mut max: u64 = n / 2;
@@ -23,19 +21,12 @@ fn calc_divisor_num(n: u64) -> u64 {
 }
 
 fn triangle_num_with_divisors_over(n: u64) -> u64 {
-    let mut i = 1;
-    let mut triangle_num: u64;
-    loop {
-        triangle_num = gen_triangle_number(i);
+    let mut tri_num_list = triangle_number_list();
 
-        if calc_divisor_num(triangle_num) > n {
-            break;
-        }
-
-        i += 1;
-    }
-
-    triangle_num
+    (1..)
+        .map(|i| tri_num_list.get(i))
+        .find(|&tri| calc_divisor_num(tri) > n)
+        .unwrap()
 }
 
 fn main() {
