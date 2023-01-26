@@ -7,16 +7,14 @@ fn is_pandigital(n_a: &Vec<u64>) -> bool {
 
 fn digits_for_pandigital_construction(n: u64) -> Vec<u64> {
     let mut collect: Vec<u64> = vec![];
-    let mut m: u64 = 1;
-    loop {
+
+    for m in 1.. {
         let a = num_to_digits(n * m);
         collect = [a, collect].concat();
 
         if collect.len() > 8 {
             break;
         }
-
-        m += 1;
     }
 
     collect
