@@ -5,16 +5,10 @@ fn first_tri_penta_hexa_after_ind(n: usize) -> u64 {
     let mut penta_list = penta_number_list();
     let mut hexa_list = hexa_number_list();
 
-    let mut i = n;
-    loop {
-        let a = tri_list.get(i);
-
-        if penta_list.is_in(a) && hexa_list.is_in(a) {
-            return a;
-        }
-
-        i += 1;
-    }
+    (n..)
+        .map(|i| tri_list.get(i))
+        .find(|&tri| penta_list.is_in(tri) && hexa_list.is_in(tri))
+        .unwrap()
 }
 
 fn main() {
