@@ -1,41 +1,34 @@
-use num_bigint::{ ToBigUint, BigUint };
-use num_traits::{ Zero, One };
+use custom_math_utilities::num_to_digits;
 
-fn big_uint_to_digits(n: BigUint) -> Vec<BigUint> {
-    let mut digits = vec![];
-    let mut n = n;
-    let biguint_ten = 10.to_biguint().unwrap();
+fn create_multiples_digits(i: u64, mult_max: u64) -> Vec<Vec<u64>> {
+    (1..=mult_max)
+        .map(|n| n * i)
+        .map(|n| {
+            let mut digits = num_to_digits(n);
+            digits.sort();
+            digits
+        })
+        .collect()
+}
 
-    while n > Zero::zero() {
-        digits.push(n.clone() % biguint_ten.clone());
-        n /= biguint_ten.clone();
-    }
-
-    digits.sort();
-
-    digits
+fn permuted_multiples(mult_max: u64) -> u64 {
+    (1..)
+        .map(|i| (i, create_multiples_digits(i, mult_max)))
+        .find(|(_, multiples_digits)| multiples_digits.windows(2).all(|ab| ab[0] == ab[1]))
+        .unwrap()
+        .0
 }
 
 fn main() {
-    let big_one: BigUint = One::one();
-    let mut i: BigUint = big_one.clone();
-    let multipliers = (1..=6).map(|n| n.to_biguint().unwrap());
+    println!("{}", permuted_multiples(6))
+}
 
-    loop {
-        let multiples_digits = multipliers.clone()
-            .map(|n| n*i.clone())
-            .map(big_uint_to_digits)
-            .collect::<Vec<Vec<BigUint>>>();
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-        let all_digits_the_same = multiples_digits.windows(2)
-            .all(|ab| ab[0]==ab[1]);
-
-        if all_digits_the_same {
-            break;
-        }
-
-        i += big_one.clone();
+    #[test]
+    fn q_case() {
+        assert_eq!(permuted_multiples(6), 142857);
     }
-
-    println!("{}", i)
 }
