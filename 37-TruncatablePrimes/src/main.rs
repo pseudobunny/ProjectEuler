@@ -26,9 +26,8 @@ fn check_truncated(n: u64) -> bool {
 
 fn sum_truncatable_primes() -> u64 {
     let mut trunc_primes = vec![];
-    let mut i = 10;
 
-    loop {
+    for i in 10.. {
         if check_truncated(i) {
             trunc_primes.push(i)
         }
@@ -36,8 +35,6 @@ fn sum_truncatable_primes() -> u64 {
         if trunc_primes.len() > 10 {
             break;
         }
-
-        i += 1;
     }
 
     trunc_primes.iter().sum()
