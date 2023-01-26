@@ -1,71 +1,43 @@
+use custom_math_utilities::{check_primality, digits_to_num, num_to_digits};
 use itertools::Itertools;
 use std::collections::HashSet;
 
-fn digit_to_vec(num: u64) -> Vec<u64> {
-    fn push_inner(n: u64, digits: &mut Vec<u64>) {
-        digits.push(n % 10);
-
-        if n >= 10 {
-            push_inner(n/10, digits);
-        }
-    }
-    
-    let mut digits: Vec<u64> = vec![];
-    push_inner(num, &mut digits);
-
-    digits.into_iter().rev().collect()
-}
-
-fn slice_to_int(n_a: &[u64]) -> u64 {
-    let mut t = 1;
-    let mut n = 0;
-    for n_d in n_a.iter().rev() {
-        n += *n_d*t;
-        t *= 10;
-    }
-
-    n
-}
-
-fn check_primality(n: u64) -> bool {
-    if n == 2 || n == 3 {
-        return true;
-    }
-    if n <= 1 || n % 2 == 0 || n %3 == 0 {
-        return false;
-    }
-    let mut d = 5;
-    while d*d <= n {
-        if n % d == 0 || n % (d + 2) == 0 {
-            return false;
-        }
-        d += 6;
-    }
-
-    true
-}
-
 fn index_permutations(len: usize) -> Vec<Vec<usize>> {
-    (1..len).map(|n| (0..len).permutations(n).unique().collect_vec()).collect_vec().concat()
+    (1..len)
+        .map(|n| (0..len).permutations(n).unique().collect_vec())
+        .collect_vec()
+        .concat()
+}
+
+fn replace_digits_of_num_vec(digits: &[u64], indices: &[usize], replace_digit: u64) -> Vec<u64> {
+    digits
+        .clone()
+        .iter()
+        .enumerate()
+        .map(|(i, v)| {
+            if indices.contains(&i) {
+                replace_digit as u64
+            } else {
+                *v
+            }
+        })
+        .collect_vec()
 }
 
 fn max_prime_value_family(num: u64) -> Vec<u64> {
-    let num_digits = digit_to_vec(num);
+    let num_digits = num_to_digits(num);
     let len = num_digits.len();
     let ind_perm = index_permutations(len);
 
-    let num_digits_replaced = ind_perm.iter()
+    let num_digits_replaced = ind_perm
+        .iter()
         .map(|ind| {
-            (0..10).map(|d| {
-                num_digits.clone().iter()
-                    .enumerate()
-                    .map(|(i, v)| if ind.contains(&i) { d as u64 } else { *v })
-                    .collect_vec()
-            })
-            .map(|v| slice_to_int(&v[..]))
-            .filter(|n| digit_to_vec(*n).len() == len)
-            .filter(|n| check_primality(*n))
-            .collect_vec()
+            (0..10)
+                .map(|d| replace_digits_of_num_vec(&num_digits, &ind, d))
+                .map(|v| digits_to_num(&v))
+                .filter(|n| num_to_digits(*n).len() == len)
+                .filter(|n| check_primality(*n))
+                .collect_vec()
         })
         .filter(|v| !v.is_empty())
         .collect_vec();
@@ -75,7 +47,7 @@ fn max_prime_value_family(num: u64) -> Vec<u64> {
     for n_d_r in num_digits_replaced {
         replaced_set.insert(n_d_r);
     }
-    
+
     let mut replaced_vec = replaced_set.iter().collect_vec();
     replaced_vec.sort_by_key(|b| std::cmp::Reverse(b.len()));
 
@@ -86,9 +58,8 @@ fn max_prime_value_family(num: u64) -> Vec<u64> {
     }
 }
 
-fn main() {
+fn find_primes_of_family(family: usize) -> Vec<u64> {
     let mut n = 9;
-    let family = 8;
 
     loop {
         n += 1;
@@ -100,8 +71,29 @@ fn main() {
         }
 
         let prime_family = max_prime_value_family(n);
+
         if prime_family.len() == family {
-            return println!("{:?}", prime_family);
+            break prime_family;
         }
+    }
+}
+
+fn main() {
+    return println!("{:?}", find_primes_of_family(8));
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn base_case() {
+        assert_eq!(find_primes_of_family(6)[0], 13);
+        assert_eq!(find_primes_of_family(7)[0], 56003);
+    }
+
+    #[test]
+    fn q_case() {
+        assert_eq!(find_primes_of_family(8)[0], 121313);
     }
 }
