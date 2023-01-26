@@ -24,6 +24,19 @@ fn replace_digits_of_num_vec(digits: &[u64], indices: &[usize], replace_digit: u
         .collect_vec()
 }
 
+fn replace_digits_of_num_vec_with_one_through_nine(
+    digits: &[u64],
+    indices: &[usize],
+    len: usize,
+) -> Vec<u64> {
+    (0..10)
+        .map(|d| replace_digits_of_num_vec(digits, indices, d))
+        .map(|v| digits_to_num(&v))
+        .filter(|n| num_to_digits(*n).len() == len)
+        .filter(|n| check_primality(*n))
+        .collect_vec()
+}
+
 fn max_prime_value_family(num: u64) -> Vec<u64> {
     let num_digits = num_to_digits(num);
     let len = num_digits.len();
@@ -31,14 +44,7 @@ fn max_prime_value_family(num: u64) -> Vec<u64> {
 
     let num_digits_replaced = ind_perm
         .iter()
-        .map(|ind| {
-            (0..10)
-                .map(|d| replace_digits_of_num_vec(&num_digits, &ind, d))
-                .map(|v| digits_to_num(&v))
-                .filter(|n| num_to_digits(*n).len() == len)
-                .filter(|n| check_primality(*n))
-                .collect_vec()
-        })
+        .map(|ind| replace_digits_of_num_vec_with_one_through_nine(&num_digits, ind, len))
         .filter(|v| !v.is_empty())
         .collect_vec();
 
