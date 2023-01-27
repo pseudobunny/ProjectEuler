@@ -1,29 +1,48 @@
 use memoize::memoize;
-use num_bigint::{ ToBigUint, BigUint };
-use num_traits::{Zero, One};
+use num::BigUint;
 
 #[memoize]
 fn factorial(n: BigUint) -> BigUint {
-    if n == Zero::zero() {
-        One::one()
+    if n == BigUint::from(0_u64) {
+        BigUint::from(1_u64)
     } else {
-        n.clone() * factorial(n- 1_u64)
+        n.clone() * factorial(n - 1_u64)
     }
 }
 
 fn combination(n: BigUint, r: BigUint) -> BigUint {
-    factorial(n.clone())/(factorial(r.clone()) * factorial(n-r))
+    factorial(n.clone()) / (factorial(r.clone()) * factorial(n - r))
+}
+
+fn combinatoric_values_for_all_valid_r(n: u64) -> Vec<BigUint> {
+    (1..=n)
+        .map(|r| combination(BigUint::from(n), BigUint::from(r)))
+        .collect()
+}
+
+fn number_of_combinatoric_values_greater_than(max: u64, max_n: u64) -> usize {
+    (1..=max_n)
+        .flat_map(|n| combinatoric_values_for_all_valid_r(n))
+        .filter(|c| *c > BigUint::from(max))
+        .count()
 }
 
 fn main() {
-    let combinatorics_vec = (1..=100)
-        .map(|n| (n.to_biguint().unwrap(), (1..=n).map(|r| (r as u64).to_biguint().unwrap()).collect::<Vec<BigUint>>()))
-        .map(|(n,rv)| rv.iter().map(|r| combination(n.clone(), r.clone())).collect::<Vec<BigUint>>())
-        .collect::<Vec<Vec<BigUint>>>()
-        .concat();
+    println!(
+        "{}",
+        number_of_combinatoric_values_greater_than(1_000_000, 100)
+    )
+}
 
-    let combinatorics = combinatorics_vec.iter()
-        .filter(|c| **c  > 1_000_000.to_biguint().unwrap());
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-    println!("{}", combinatorics.count())
+    #[test]
+    fn q_case() {
+        assert_eq!(
+            number_of_combinatoric_values_greater_than(1_000_000, 100),
+            4075
+        );
+    }
 }

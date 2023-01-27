@@ -7,5 +7,5 @@ edition = "2021"
 
 [dependencies]
 memoize = "0.3.1"
-num-bigint = "0.4.3"
-num-traits = "0.2.15"
+num = "0.4.0"
+
