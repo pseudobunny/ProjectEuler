@@ -15,6 +15,9 @@ pub use crate::digit_operations::digits_to_num_filter_ind;
 pub use crate::digit_operations::big_num_to_digits;
 pub use crate::digit_operations::digits_to_big_num;
 
+pub mod convergents_list;
+pub use crate::convergents_list::ConvergentsList;
+
 // GENERAL USEFUL FUNCTIONS (probably break into their own files eventually)
 
 pub fn check_primality<N: Num + NumCast + PartialOrd + Copy>(n: N) -> bool {
