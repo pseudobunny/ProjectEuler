@@ -24,21 +24,20 @@ fn check_if_sum_of_prime_and_square(i: u64, primes: &[u64]) -> bool {
 fn smallest_break_of_goldbach_conjecture() -> u64 {
     let mut primes = vec![2,3,5,7];
     
-    let mut i = 8;
-    loop {
-        i += 1;
-
+    let mut result = 8;
+    for i in 8.. {
         if check_primality(i) {
             primes.push(i);
             continue;
         }
 
         if i % 2 != 0 && !check_if_sum_of_prime_and_square(i, &primes) {
+            result = i;
             break;
         }
     }
 
-    i
+    result
 }
 
 fn main() {
