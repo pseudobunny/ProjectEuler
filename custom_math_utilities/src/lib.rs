@@ -1,5 +1,4 @@
-use core::iter::Sum;
-use num::{traits::Pow, Num, NumCast, Float};
+use num::{Num, NumCast, Float};
 
 // PULL IN SUBMODULES
 
@@ -8,6 +7,13 @@ pub use crate::generated_func_list::GeneratedFuncList;
 pub use crate::generated_func_list::triangle_number_list;
 pub use crate::generated_func_list::penta_number_list;
 pub use crate::generated_func_list::hexa_number_list;
+
+pub mod digit_operations;
+pub use crate::digit_operations::digits_to_num;
+pub use crate::digit_operations::num_to_digits;
+pub use crate::digit_operations::digits_to_num_filter_ind;
+pub use crate::digit_operations::big_num_to_digits;
+pub use crate::digit_operations::digits_to_big_num;
 
 // GENERAL USEFUL FUNCTIONS (probably break into their own files eventually)
 
@@ -40,44 +46,6 @@ pub fn check_palindrome(x: u64) -> bool {
 
 pub fn check_if_whole<F: Float>(n: F) -> bool {
     (n - n.trunc()).abs() < NumCast::from(0.00001).unwrap()
-}
-
-pub fn num_to_digits<N: Num + NumCast + PartialOrd + Copy>(num: N) -> Vec<N> {
-    let ten: N = NumCast::from(10).unwrap();
-
-    fn ntd_inner<N: Num + NumCast + PartialOrd + Copy>(n: N, digits: &mut Vec<N>, ten_inner: N) {
-        digits.push(n % ten_inner);
-        if n >= ten_inner {
-            ntd_inner(n / ten_inner, digits, ten_inner);
-        }
-    }
-
-    let mut digits = vec![];
-    ntd_inner(num, &mut digits, ten);
-
-    digits
-}
-
-pub fn digits_to_num<N: Num + NumCast + PartialOrd + Copy + Sum>(digits: &[N]) -> N {
-    digits
-        .iter()
-        .enumerate()
-        .map(|(i, n)| *n * NumCast::from(10.pow(i as u32)).unwrap())
-        .sum()
-}
-
-pub fn digits_to_num_filter_ind<N: Num + NumCast + PartialOrd + Copy + Sum>(
-    digits: &[N],
-    ind: usize,
-) -> N {
-    digits_to_num(
-        &digits
-            .iter()
-            .enumerate()
-            .filter(|(i, _)| *i != ind)
-            .map(|(_, n)| *n)
-            .collect::<Vec<N>>(),
-    )
 }
 
 pub fn to_base(n: u32, base: u32) -> String {

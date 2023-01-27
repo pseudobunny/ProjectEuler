@@ -1,35 +1,10 @@
-use num_bigint::{ ToBigUint, BigUint };
-use num_traits::{ Zero, One };
-
-fn digit_to_vec(num: BigUint) -> Vec<BigUint> {
-    fn push_inner(n: BigUint, digits: &mut Vec<BigUint>) {
-        digits.push(n.clone() % 10_u64);
-
-        if n >= 10.to_biguint().unwrap() {
-            push_inner(n/10_u64, digits);
-        }
-    }
-    
-    let mut digits: Vec<BigUint> = vec![];
-    push_inner(num, &mut digits);
-
-    digits.into_iter().rev().collect()
-}
-
-fn slice_to_int(n_a: &[BigUint]) -> BigUint {
-    let mut t: BigUint = One::one();
-    let mut n: BigUint = Zero::zero();
-    for n_d in n_a.iter().rev() {
-        n += n_d.clone()*t.clone();
-        t *= 10_u64;
-    }
-
-    n
-}
+use custom_math_utilities::{big_num_to_digits, digits_to_big_num};
+use num::BigUint;
 
 fn reverse_digit(num: BigUint) -> BigUint {
-    let digit_vec = digit_to_vec(num);
-    slice_to_int(&(digit_vec.iter().rev().cloned().collect::<Vec<BigUint>>())[..])
+    let digit_vec = big_num_to_digits(num.clone());
+    let reversed_vec = digit_vec.iter().rev().cloned().collect::<Vec<BigUint>>();
+    digits_to_big_num(&reversed_vec)
 }
 
 fn reverse_sum(num: BigUint) -> BigUint {
@@ -43,9 +18,7 @@ fn check_palindrome(x: BigUint) -> bool {
     x_str.bytes().take(n).eq(x_str.bytes().rev().take(n))
 }
 
-fn is_lychrel(num: BigUint) -> bool {
-    let max_iterations = 50;
-
+fn is_lychrel(num: BigUint, max_iterations: usize) -> bool {
     let mut curr_num = num;
     for _ in 0..max_iterations {
         curr_num = reverse_sum(curr_num.clone());
@@ -58,9 +31,22 @@ fn is_lychrel(num: BigUint) -> bool {
     true
 }
 
-fn main() {
-    let lychrels = (1..10_000).map(|n| n.to_biguint().unwrap())
-        .filter(|n| is_lychrel(n.clone()));
+fn lychrel_numbers_below(max: u64, max_iterations: usize) -> usize {
+    (1..max)
+        .filter(|&n| is_lychrel(BigUint::from(n), max_iterations))
+        .count()
+}
 
-    println!("{}", lychrels.count());
+fn main() {
+    println!("{}", lychrel_numbers_below(10_000, 50));
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn q_case() {
+        assert_eq!(lychrel_numbers_below(10_000, 50), 249);
+    }
 }
