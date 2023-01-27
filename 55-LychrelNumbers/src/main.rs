@@ -1,4 +1,4 @@
-use custom_math_utilities::{big_num_to_digits, digits_to_big_num};
+use custom_math_utilities::{big_num_to_digits, digits_to_big_num, check_palindrome};
 use num::BigUint;
 
 fn reverse_digit(num: BigUint) -> BigUint {
@@ -9,13 +9,6 @@ fn reverse_digit(num: BigUint) -> BigUint {
 
 fn reverse_sum(num: BigUint) -> BigUint {
     num.clone() + reverse_digit(num)
-}
-
-fn check_palindrome(x: BigUint) -> bool {
-    let x_str = x.to_string();
-    let n = x_str.len() / 2;
-
-    x_str.bytes().take(n).eq(x_str.bytes().rev().take(n))
 }
 
 fn is_lychrel(num: BigUint, max_iterations: usize) -> bool {

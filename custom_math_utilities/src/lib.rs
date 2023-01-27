@@ -37,7 +37,7 @@ pub fn check_primality<N: Num + NumCast + PartialOrd + Copy>(n: N) -> bool {
     true
 }
 
-pub fn check_palindrome(x: u64) -> bool {
+pub fn check_palindrome<T: ToString>(x: T) -> bool {
     let x_str = x.to_string();
     let n = x_str.len() / 2;
 
