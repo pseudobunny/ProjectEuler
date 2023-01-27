@@ -1,4 +1,4 @@
-use custom_math_utilities::{big_num_to_digits, digits_to_big_num, check_palindrome};
+use custom_math_utilities::{big_num_to_digits, check_palindrome, digits_to_big_num};
 use num::BigUint;
 
 fn reverse_digit(num: BigUint) -> BigUint {
