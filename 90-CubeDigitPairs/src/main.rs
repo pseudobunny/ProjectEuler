@@ -136,16 +136,27 @@ fn check_if_sets_match(a: &[u64], b: &[u64]) -> bool {
     SQUARES.iter().all(|d| created_digits.contains(d))
 }
 
-fn main() {
-    let cube_sets = (0..10).combinations(6).unique();
-
-    let all_viable_sets = cube_sets.filter(|s| check_set_viable(s));
-
-    let all_viable_pairs = all_viable_sets
+fn count_of_viable_pairs() -> usize {
+    (0..10)
+        .combinations(6)
+        .unique()
+        .filter(|s| check_set_viable(s))
         .combinations(2)
         .unique()
         .filter(|v| check_if_sets_match(&v[0], &v[1]))
-        .count();
+        .count()
+}
 
-    println!("{}", all_viable_pairs);
+fn main() {
+    println!("{}", count_of_viable_pairs());
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn q_case() {
+        assert_eq!(count_of_viable_pairs(), 1217);
+    }
 }
