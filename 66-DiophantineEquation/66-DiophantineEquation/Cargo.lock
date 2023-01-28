@@ -13,9 +13,6 @@ name = "diophantine_equation"
 version = "0.1.0"
 dependencies = [
  "num",
- "num-bigint",
- "num-iter",
- "num-traits",
 ]
 
 [[package]]
