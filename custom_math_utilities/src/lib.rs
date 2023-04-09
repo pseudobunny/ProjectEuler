@@ -1,19 +1,22 @@
-use num::{Num, NumCast, Float};
+use num::{Float, Num, NumCast};
 
 // PULL IN SUBMODULES
 
 pub mod generated_func_list;
-pub use crate::generated_func_list::GeneratedFuncList;
-pub use crate::generated_func_list::triangle_number_list;
-pub use crate::generated_func_list::penta_number_list;
+pub use crate::generated_func_list::hepta_number_list;
 pub use crate::generated_func_list::hexa_number_list;
+pub use crate::generated_func_list::octa_number_list;
+pub use crate::generated_func_list::penta_number_list;
+pub use crate::generated_func_list::square_number_list;
+pub use crate::generated_func_list::triangle_number_list;
+pub use crate::generated_func_list::GeneratedFuncList;
 
 pub mod digit_operations;
-pub use crate::digit_operations::digits_to_num;
-pub use crate::digit_operations::num_to_digits;
-pub use crate::digit_operations::digits_to_num_filter_ind;
 pub use crate::digit_operations::big_num_to_digits;
 pub use crate::digit_operations::digits_to_big_num;
+pub use crate::digit_operations::digits_to_num;
+pub use crate::digit_operations::digits_to_num_filter_ind;
+pub use crate::digit_operations::num_to_digits;
 
 pub mod convergents_list;
 pub use crate::convergents_list::ConvergentsList;

@@ -4,7 +4,7 @@ pub struct ConvergentsList {
     pub a: Vec<BigUint>,
     pub h: Vec<BigUint>,
     pub k: Vec<BigUint>,
-    pattern: fn(usize) -> BigUint
+    pattern: fn(usize) -> BigUint,
 }
 
 impl ConvergentsList {
@@ -16,7 +16,7 @@ impl ConvergentsList {
             a: vec![a0.clone(), a1.clone()],
             h: vec![a0.clone(), a1.clone() * a0 + 1_u32],
             k: vec![BigUint::from(1_u32), a1],
-            pattern
+            pattern,
         }
     }
 

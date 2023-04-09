@@ -1,5 +1,5 @@
 use core::iter::Sum;
-use num::{traits::Pow, Num, NumCast, BigUint};
+use num::{traits::Pow, BigUint, Num, NumCast};
 
 pub fn num_to_digits<N: Num + NumCast + PartialOrd + Copy>(num: N) -> Vec<N> {
     let ten: N = NumCast::from(10).unwrap();
