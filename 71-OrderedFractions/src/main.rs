@@ -21,21 +21,19 @@ fn fractions_with_denominator_between(
 fn fraction_to_left_of_three_sevenths(d_max: i64) -> Option<Rational64> {
     let three_sevenths = Rational64::new(3, 7);
 
-    (1..=d_max)
-        .fold(None, |to_left, d| {
-            fractions_with_denominator_between(d, three_sevenths, to_left)
-                .iter()
-                .fold(to_left, |to_left, &fraction| match to_left {
-                    Some(left_fraction) => {
-                        if fraction > left_fraction {
-                            Some(fraction)
-                        } else {
-                            to_left
-                        }
+    (1..=d_max).fold(None, |to_left, d| {
+        fractions_with_denominator_between(d, three_sevenths, to_left)
+            .iter()
+            .fold(to_left, |to_left, &fraction| {
+                to_left.map_or(Some(fraction), |left_fraction| {
+                    if fraction > left_fraction {
+                        Some(fraction)
+                    } else {
+                        to_left
                     }
-                    None => Some(fraction),
                 })
-        })
+            })
+    })
 }
 
 fn main() {
