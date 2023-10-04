@@ -21,6 +21,9 @@ pub use crate::digit_operations::num_to_digits;
 pub mod convergents_list;
 pub use crate::convergents_list::ConvergentsList;
 
+pub mod sqrt_continuous_fraction;
+pub use crate::sqrt_continuous_fraction::SqrtContinuousFractionCoefficients;
+
 // GENERAL USEFUL FUNCTIONS (probably break into their own files eventually)
 
 pub fn check_primality<N: Num + NumCast + PartialOrd + Copy>(n: N) -> bool {
@@ -51,7 +54,7 @@ pub fn check_palindrome<T: ToString>(x: T) -> bool {
 }
 
 pub fn check_if_whole<F: Float>(n: F) -> bool {
-    (n - n.trunc()).abs() < NumCast::from(0.00001).unwrap()
+    (n - n.round()).abs() < NumCast::from(0.00001).unwrap()
 }
 
 pub fn to_base(n: u32, base: u32) -> String {
@@ -60,7 +63,7 @@ pub fn to_base(n: u32, base: u32) -> String {
 
     loop {
         let m = n % base;
-        n = n / base;
+        n /= base;
 
         result.push(std::char::from_digit(m, base).unwrap());
         if n == 0 {
@@ -88,7 +91,7 @@ mod tests {
 
     #[test]
     fn test_if_whole() {
-        assert!(check_if_whole(0.999999999999));
+        assert!(check_if_whole(0.999999999999999));
         assert!(check_if_whole(1.000000000034453));
     }
 
@@ -101,12 +104,12 @@ mod tests {
 
     #[test]
     fn test_digits_to_num() {
-        assert_eq!(digits_to_num(&vec![1, 2, 3, 4, 5, 6]), 654321)
+        assert_eq!(digits_to_num(&[1, 2, 3, 4, 5, 6]), 654321)
     }
 
     #[test]
     fn test_digits_to_num_filter_ind() {
-        assert_eq!(digits_to_num_filter_ind(&vec![1, 2, 3, 4, 5, 6], 1), 65431)
+        assert_eq!(digits_to_num_filter_ind(&[1, 2, 3, 4, 5, 6], 1), 65431)
     }
 
     #[test]
