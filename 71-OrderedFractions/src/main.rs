@@ -14,7 +14,7 @@ fn fractions_with_denominator_between(
     };
 
     (min_numerator..max_numerator)
-        .map(|n| Rational64::new(n, d))
+        .map(|n| Rational64::new(n, d).reduced())
         .collect()
 }
 
