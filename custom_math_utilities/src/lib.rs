@@ -81,8 +81,11 @@ pub fn relatively_prime_to(n: u64) -> Vec<u64> {
 }
 
 pub fn totient(n: u64) -> u64 {
+    if n == 1 {
+        return 1;
+    }
+
     let prime_factors = Factorization::run(n).factors;
-    println!("{:?}", prime_factors);
     let totient_f = prime_factors
         .iter()
         .unique()
