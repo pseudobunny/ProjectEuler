@@ -1,4 +1,6 @@
-use num::{Float, Num, NumCast};
+use itertools::Itertools;
+use num::{Integer, Float, Num, NumCast};
+use prime_factorization::Factorization;
 
 // PULL IN SUBMODULES
 
@@ -74,6 +76,22 @@ pub fn to_base(n: u32, base: u32) -> String {
     result.into_iter().rev().collect()
 }
 
+pub fn relatively_prime_to(n: u64) -> Vec<u64> {
+    (1..n).filter(|m| n.gcd(m) == 1).collect()
+}
+
+pub fn totient(n: u64) -> u64 {
+    let prime_factors = Factorization::run(n).factors;
+    println!("{:?}", prime_factors);
+    let totient_f = prime_factors
+        .iter()
+        .unique()
+        .map(|&factor| ((factor - 1) as f64 / factor as f64))
+        .fold(n as f64, |acc, multipier| acc * multipier);
+
+    totient_f.round() as u64
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -115,5 +133,31 @@ mod tests {
     #[test]
     fn test_to_base() {
         assert_eq!(to_base(7, 2), "111"); // have only needed base 2 so far
+    }
+
+    #[test]
+    fn test_relatively_prime_to() {
+        assert_eq!(relatively_prime_to(2), vec![1]);
+        assert_eq!(relatively_prime_to(3), vec![1, 2]);
+        assert_eq!(relatively_prime_to(4), vec![1, 3]);
+        assert_eq!(relatively_prime_to(5), vec![1, 2, 3, 4]);
+        assert_eq!(relatively_prime_to(6), vec![1, 5]);
+        assert_eq!(relatively_prime_to(7), vec![1, 2, 3, 4, 5, 6]);
+        assert_eq!(relatively_prime_to(8), vec![1, 3, 5, 7]);
+        assert_eq!(relatively_prime_to(9), vec![1, 2, 4, 5, 7, 8]);
+        assert_eq!(relatively_prime_to(10), vec![1, 3, 7, 9]);
+    }
+
+    #[test]
+    fn test_totient() {
+        assert_eq!(totient(2), 1);
+        assert_eq!(totient(3), 2);
+        assert_eq!(totient(4), 2);
+        assert_eq!(totient(5), 4);
+        assert_eq!(totient(6), 2);
+        assert_eq!(totient(7), 6);
+        assert_eq!(totient(8), 4);
+        assert_eq!(totient(9), 6);
+        assert_eq!(totient(10), 4);
     }
 }
