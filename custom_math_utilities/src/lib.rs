@@ -31,6 +31,7 @@ pub use crate::digit_factorial::digit_factorial;
 
 pub mod partition;
 pub use crate::partition::partition;
+pub use crate::partition::prime_partition;
 
 // GENERAL USEFUL FUNCTIONS (probably break into their own files eventually)
 
