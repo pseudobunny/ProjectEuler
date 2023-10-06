@@ -1,5 +1,5 @@
 use itertools::Itertools;
-use num::{Integer, Float, Num, NumCast};
+use num::{Float, Integer, Num, NumCast};
 use prime_factorization::Factorization;
 
 // PULL IN SUBMODULES
@@ -28,6 +28,9 @@ pub use crate::sqrt_continuous_fraction::SqrtContinuousFractionCoefficients;
 
 pub mod digit_factorial;
 pub use crate::digit_factorial::digit_factorial;
+
+pub mod partition;
+pub use crate::partition::partition;
 
 // GENERAL USEFUL FUNCTIONS (probably break into their own files eventually)
 
@@ -165,5 +168,10 @@ mod tests {
         assert_eq!(totient(8), 4);
         assert_eq!(totient(9), 6);
         assert_eq!(totient(10), 4);
+    }
+
+    #[test]
+    fn test_partition() {
+        assert_eq!(partition(5), 7)
     }
 }
