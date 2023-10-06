@@ -26,6 +26,9 @@ pub use crate::convergents_list::ConvergentsList;
 pub mod sqrt_continuous_fraction;
 pub use crate::sqrt_continuous_fraction::SqrtContinuousFractionCoefficients;
 
+pub mod digit_factorial;
+pub use crate::digit_factorial::digit_factorial;
+
 // GENERAL USEFUL FUNCTIONS (probably break into their own files eventually)
 
 pub fn check_primality<N: Num + NumCast + PartialOrd + Copy>(n: N) -> bool {
