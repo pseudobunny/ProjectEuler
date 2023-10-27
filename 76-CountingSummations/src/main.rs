@@ -1,7 +1,8 @@
-use custom_math_utilities::partition;
+use custom_math_utilities::PartionSolver;
+use num::BigInt;
 
-fn number_of_ways_to_sum(n: i64) -> i64 {
-    partition(n) - 1
+fn number_of_ways_to_sum(n: usize) -> BigInt {
+    PartionSolver::new().partition(n) - 1
 }
 
 fn main() {
@@ -14,11 +15,11 @@ mod tests {
 
     #[test]
     fn base_case() {
-        assert_eq!(number_of_ways_to_sum(5), 6)
+        assert_eq!(number_of_ways_to_sum(5), BigInt::from(6))
     }
 
     #[test]
     fn q_case() {
-        assert_eq!(number_of_ways_to_sum(100), 190569291)
+        assert_eq!(number_of_ways_to_sum(100), BigInt::from(190569291))
     }
 }
