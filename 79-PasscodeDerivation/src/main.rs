@@ -1,5 +1,4 @@
 use custom_math_utilities::{digits_to_num, num_to_digits};
-use itertools::Itertools;
 use std::{
     collections::{HashMap, HashSet},
     fs::File,
@@ -27,14 +26,12 @@ fn analysis(filename: &str) -> HashMap<u64, HashSet<u64>> {
     let mut map = HashMap::new();
 
     let lines = lines_to_uints(filename);
-    
-    lines
-        .iter()
-        .flat_map(|&n| num_to_digits(n))
-        .dedup_by(|d1, d2| d1 == d2)
-        .for_each(|d| {
+
+    lines.iter().flat_map(|&n| num_to_digits(n)).for_each(|d| {
+        if !map.contains_key(&d) {
             map.insert(d, HashSet::new());
-        });
+        }
+    });
 
     lines
         .iter()

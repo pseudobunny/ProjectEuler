@@ -145,7 +145,6 @@ name = "passcode_derivation"
 version = "0.1.0"
 dependencies = [
  "custom_math_utilities",
- "itertools 0.11.0",
 ]
 
 [[package]]
