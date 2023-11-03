@@ -34,6 +34,9 @@ pub use crate::partition::partition_approximation;
 pub use crate::partition::prime_partition;
 pub use crate::partition::PartionSolver;
 
+pub mod sqrt_decimal_expansion;
+pub use crate::sqrt_decimal_expansion::sqrt_decimal_expansion;
+
 // GENERAL USEFUL FUNCTIONS (probably break into their own files eventually)
 
 pub fn check_primality<N: Num + NumCast + PartialOrd + Copy>(n: N) -> bool {
