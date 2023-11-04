@@ -14,7 +14,7 @@ impl ConvergentsList {
 
         ConvergentsList {
             a: vec![a0.clone(), a1.clone()],
-            h: vec![a0.clone(), a1.clone() * a0 + 1_u32],
+            h: vec![a0.clone(), &a1 * &a0 + 1_u32],
             k: vec![BigUint::from(1_u32), a1],
             pattern,
         }
@@ -27,9 +27,9 @@ impl ConvergentsList {
         let hk_len = self.h.len();
 
         self.h
-            .push(a_n.clone() * self.h[hk_len - 1].clone() + self.h[hk_len - 2].clone());
+            .push(&a_n * &self.h[hk_len - 1] + &self.h[hk_len - 2]);
         self.k
-            .push(a_n * self.k[hk_len - 1].clone() + self.k[hk_len - 2].clone());
+            .push(&a_n * &self.k[hk_len - 1] + &self.k[hk_len - 2]);
     }
 
     pub fn get(&mut self, i: usize) -> (BigUint, BigUint, BigUint) {

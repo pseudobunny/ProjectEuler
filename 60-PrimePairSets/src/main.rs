@@ -58,15 +58,17 @@ fn min_set_starter(n: u64, map: &HashMap<u64, Vec<u64>>) -> Option<Vec<u64>> {
 fn min_set(n_v: Vec<u64>, map: &HashMap<u64, Vec<u64>>) -> Vec<Vec<u64>> {
     let possible_avenues = map
         .keys()
-        .filter(|k| n_v.iter().all(|n| map[k].contains(n)));
+        .filter(|k| n_v.iter().all(|n| map[k].contains(n)))
+        .collect::<Vec<&u64>>();
 
-    if possible_avenues.clone().count() < 1 {
+    if possible_avenues.len() < 1 {
         vec![n_v]
     } else {
         possible_avenues
-            .flat_map(|a| {
+            .iter()
+            .flat_map(|&&a| {
                 let mut new_v = n_v.clone();
-                new_v.push(*a);
+                new_v.push(a);
 
                 min_set(new_v, map)
             })

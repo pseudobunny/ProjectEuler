@@ -45,9 +45,9 @@ pub fn big_num_to_digits(num: BigUint) -> Vec<BigUint> {
     let ten = BigUint::from(10_u32);
 
     fn ntd_inner(n: BigUint, digits: &mut Vec<BigUint>, ten_inner: BigUint) {
-        digits.push(n.clone() % ten_inner.clone());
-        if n.clone() >= ten_inner.clone() {
-            ntd_inner(n / ten_inner.clone(), digits, ten_inner);
+        digits.push(&n % &ten_inner);
+        if &n >= &ten_inner {
+            ntd_inner(n / &ten_inner, digits, ten_inner);
         }
     }
 
@@ -61,6 +61,6 @@ pub fn digits_to_big_num(digits: &[BigUint]) -> BigUint {
     digits
         .iter()
         .enumerate()
-        .map(|(i, n)| n.clone() * BigUint::from(10_u32).pow(i as u32))
+        .map(|(i, n)| n * &BigUint::from(10_u32).pow(i as u32))
         .sum()
 }

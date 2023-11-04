@@ -2,21 +2,25 @@ use memoize::memoize;
 use num::BigUint;
 
 #[memoize]
-fn factorial(n: BigUint) -> BigUint {
-    if n == BigUint::from(0_u64) {
+fn memoized_factorial(n: BigUint) -> BigUint {
+    if &n == &BigUint::from(0_u64) {
         BigUint::from(1_u64)
     } else {
-        n.clone() * factorial(n - 1_u64)
+        &n * memoized_factorial(&n - 1_u64)
     }
 }
 
-fn combination(n: BigUint, r: BigUint) -> BigUint {
-    factorial(n.clone()) / (factorial(r.clone()) * factorial(n - r))
+fn factorial(n: &BigUint) -> BigUint {
+    memoized_factorial(n.clone())
+}
+
+fn combination(n: &BigUint, r: &BigUint) -> BigUint {
+    factorial(n) / (factorial(r) * factorial(&(n - r)))
 }
 
 fn combinatoric_values_for_all_valid_r(n: u64) -> Vec<BigUint> {
     (1..=n)
-        .map(|r| combination(BigUint::from(n), BigUint::from(r)))
+        .map(|r| combination(&BigUint::from(n), &BigUint::from(r)))
         .collect()
 }
 

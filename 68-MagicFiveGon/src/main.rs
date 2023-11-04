@@ -4,10 +4,10 @@ use std::collections::HashSet;
 const DIGITS: [u32; 10] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 fn determine_possible_solutions() -> Vec<(Vec<u32>, Vec<Vec<u32>>)> {
-    let inner = DIGITS.iter().permutations(5).unique();
+    let inner = DIGITS.iter().permutations(5).unique().collect_vec();
 
     let outer: Vec<Vec<Vec<u32>>> = inner
-        .clone()
+        .iter()
         .map(|i| {
             DIGITS
                 .iter()
@@ -19,8 +19,8 @@ fn determine_possible_solutions() -> Vec<(Vec<u32>, Vec<Vec<u32>>)> {
         .collect();
 
     inner
-        .clone()
-        .map(|iv| iv.into_iter().cycle().take(6).copied().collect_vec())
+        .iter()
+        .map(|iv| iv.into_iter().cycle().take(6).map(|&&n| n).collect_vec())
         .zip(outer)
         .collect()
 }
@@ -33,20 +33,25 @@ fn magic_five_gon_ring_max_string() -> u64 {
 
         ov.iter()
             .map(|o| {
-                let test_solution = i.windows(2).zip(o).map(|(iv, &on)| (on, iv[0], iv[1]));
+                let test_solution = i
+                    .windows(2)
+                    .zip(o)
+                    .map(|(iv, &on)| (on, iv[0], iv[1]))
+                    .collect_vec();
 
                 // order the solution properly
-                let min_outer = test_solution.clone().map(|t| t.0).min().unwrap();
+                let min_outer = test_solution.iter().map(|t| t.0).min().unwrap();
                 let min_outer_ind = test_solution
-                    .clone()
+                    .iter()
                     .find_position(|&n| n.0 == min_outer)
                     .unwrap()
                     .0;
 
                 test_solution
-                    .cycle()
+                    .iter()
                     .skip(min_outer_ind)
                     .take(5)
+                    .copied()
                     .collect_vec()
             })
             .filter(|ts| ts.iter().map(|(i, j, k)| i + j + k).all_equal())

@@ -174,59 +174,60 @@ impl PokerHand {
         }
 
         let val_counts = CARD_VALUE_ORDER.iter()
-            .map(|v| cards.iter().filter(|c| c.val == *v).count());
+            .map(|v| cards.iter().filter(|c| c.val == *v).count())
+            .collect::<Vec<usize>>();
 
-        if val_counts.clone().any(|c| c == 4) {
+        if val_counts.iter().any(|&c| c == 4) {
             return PokerHand::FourOfAKind(
-                *cards.iter().find(|c| c.val == CARD_VALUE_ORDER[val_counts.clone().position(|v| v == 4).unwrap()]).unwrap(),
-                *cards.iter().find(|c| c.val == CARD_VALUE_ORDER[val_counts.clone().position(|v| v == 1).unwrap()]).unwrap()
+                *cards.iter().find(|c| c.val == CARD_VALUE_ORDER[val_counts.iter().position(|&v| v == 4).unwrap()]).unwrap(),
+                *cards.iter().find(|c| c.val == CARD_VALUE_ORDER[val_counts.iter().position(|&v| v == 1).unwrap()]).unwrap()
             );
         }
 
-        if val_counts.clone().any(|c| c == 3) {
-            if val_counts.clone().any(|c| c == 2) {
+        if val_counts.iter().any(|&c| c == 3) {
+            if val_counts.iter().any(|&c| c == 2) {
                 return PokerHand::FullHouse(
-                    *cards.iter().find(|c| c.val == CARD_VALUE_ORDER[val_counts.clone().position(|v| v == 3).unwrap()]).unwrap(),
-                    *cards.iter().find(|c| c.val == CARD_VALUE_ORDER[val_counts.clone().position(|v| v == 2).unwrap()]).unwrap()
+                    *cards.iter().find(|c| c.val == CARD_VALUE_ORDER[val_counts.iter().position(|&v| v == 3).unwrap()]).unwrap(),
+                    *cards.iter().find(|c| c.val == CARD_VALUE_ORDER[val_counts.iter().position(|&v| v == 2).unwrap()]).unwrap()
                 );
             } else {
-                let ones_positions = val_counts.clone()
+                let ones_positions = val_counts.iter()
                                                .enumerate()
-                                               .filter(|(_, v)| *v == 1)
+                                               .filter(|(_, &v)| v == 1)
                                                .map(|(i, _)| i)
                                                .collect::<Vec<usize>>();
 
                 return PokerHand::ThreeOfAKind(
-                    *cards.iter().find(|c| c.val == CARD_VALUE_ORDER[val_counts.clone().position(|v| v == 3).unwrap()]).unwrap(),
+                    *cards.iter().find(|c| c.val == CARD_VALUE_ORDER[val_counts.iter().position(|&v| v == 3).unwrap()]).unwrap(),
                     *cards.iter().find(|c| c.val == CARD_VALUE_ORDER[ones_positions[1]]).unwrap(),
                     *cards.iter().find(|c| c.val == CARD_VALUE_ORDER[ones_positions[0]]).unwrap(),
                 );
             }
         }
 
-        match val_counts.clone().filter(|&v| v == 2).count() {
+        match val_counts.iter().filter(|&&v| v == 2).count() {
             2 => {
-                let twos_positions = val_counts.clone()
+                let twos_positions = val_counts.iter()
                                                .enumerate()
-                                               .filter(|(_, v)| *v == 2)
+                                               .filter(|(_, &v)| v == 2)
                                                .map(|(i, _)| i)
                                                .collect::<Vec<usize>>();
                 
                 PokerHand::TwoPair(
                     *cards.iter().find(|c| c.val == CARD_VALUE_ORDER[twos_positions[1]]).unwrap(),
                     *cards.iter().find(|c| c.val == CARD_VALUE_ORDER[twos_positions[0]]).unwrap(),
-                    *cards.iter().find(|c| c.val == CARD_VALUE_ORDER[val_counts.clone().position(|v| v == 1).unwrap()]).unwrap()
+                    *cards.iter().find(|c| c.val == CARD_VALUE_ORDER[val_counts.iter().position(|&v| v == 1).unwrap()]).unwrap()
                 )
             },
             1 => {
-                let ones_positions = val_counts.clone()
+                let ones_positions = val_counts.iter()
                                                .enumerate()
-                                               .filter(|(_, v)| *v == 1)
+                                               .filter(|(_, &v)| v == 1)
                                                .map(|(i, _)| i)
                                                .collect::<Vec<usize>>();
                 
                 PokerHand::OnePair(
-                    *cards.iter().find(|c| c.val == CARD_VALUE_ORDER[val_counts.clone().position(|v| v == 2).unwrap()]).unwrap(),
+                    *cards.iter().find(|c| c.val == CARD_VALUE_ORDER[val_counts.iter().position(|&v| v == 2).unwrap()]).unwrap(),
                     *cards.iter().find(|c| c.val == CARD_VALUE_ORDER[ones_positions[2]]).unwrap(),
                     *cards.iter().find(|c| c.val == CARD_VALUE_ORDER[ones_positions[1]]).unwrap(),
                     *cards.iter().find(|c| c.val == CARD_VALUE_ORDER[ones_positions[0]]).unwrap()

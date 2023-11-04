@@ -11,7 +11,6 @@ fn index_permutations(len: usize) -> Vec<Vec<usize>> {
 
 fn replace_digits_of_num_vec(digits: &[u64], indices: &[usize], replace_digit: u64) -> Vec<u64> {
     digits
-        .clone()
         .iter()
         .enumerate()
         .map(|(i, v)| {

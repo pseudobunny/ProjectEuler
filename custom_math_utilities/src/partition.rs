@@ -43,7 +43,7 @@ impl PartionSolver {
                     break;
                 }
 
-                let current_partition = self.partitions[n - pentagonal as usize].clone();
+                let current_partition = &self.partitions[n - pentagonal as usize].clone();
 
                 self.partitions[n as usize] +=
                     (-1_i64).pow((k + 1).abs() as u32) * current_partition;
