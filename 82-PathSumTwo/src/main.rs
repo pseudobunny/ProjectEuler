@@ -116,7 +116,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn q_case() {
+    fn base_case() {
         assert_eq!(shortest_path("src/test_matrix.txt"), 994);
     }
 }
