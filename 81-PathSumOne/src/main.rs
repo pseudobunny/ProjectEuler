@@ -62,6 +62,11 @@ mod tests {
     use super::*;
 
     #[test]
+    fn base_case() {
+        assert_eq!(min_path_sum("src/test_matrix.txt"), 2427);
+    }
+
+    #[test]
     fn q_case() {
         assert_eq!(min_path_sum("src/p081_matrix.txt"), 427337);
     }

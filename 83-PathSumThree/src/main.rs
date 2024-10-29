@@ -132,4 +132,9 @@ mod tests {
     fn base_case() {
         assert_eq!(shortest_path("src/test_matrix.txt"), 2297);
     }
+
+    #[test]
+    fn q_case() {
+        assert_eq!(shortest_path("src/0083_matrix.txt"), 425185);
+    }
 }
