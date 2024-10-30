@@ -1,0 +1,8 @@
+[package]
+name = "prime_power_triples"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+itertools = "0.13.0"
+custom_math_utilities = { path = "../custom_math_utilities"}

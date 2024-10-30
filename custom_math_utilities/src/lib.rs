@@ -59,6 +59,14 @@ pub fn check_primality<N: Num + NumCast + PartialOrd + Copy>(n: N) -> bool {
     true
 }
 
+pub fn generate_primes_under<N: Num + NumCast + PartialOrd + Copy>(n: N) -> Vec<N> {
+    (2..)
+        .map(|n| NumCast::from(n).unwrap())
+        .take_while(|i| i < &n)
+        .filter(|i| check_primality(*i))
+        .collect()
+}
+
 pub fn check_palindrome<T: ToString>(x: T) -> bool {
     let x_str = x.to_string();
     let n = x_str.len() / 2;
@@ -114,6 +122,11 @@ mod tests {
     fn test_primeality() {
         assert!(check_primality(104743_u64));
         assert!(check_primality(104743_i64));
+    }
+
+    #[test]
+    fn test_generate_primes_under() {
+        assert_eq!(generate_primes_under(20), vec![2,3,5,7,11,13,17,19])
     }
 
     #[test]
