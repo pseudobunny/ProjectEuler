@@ -127,18 +127,18 @@ impl MonopolySquare {
         MONOPOLY_SQUARE_IND_MAP[ind % 40]
     }
 
-    fn next_r_from(position: MonopolySquare) -> MonopolySquare {
+    fn next_r_from<'a>(position: MonopolySquare) -> &'a MonopolySquare {
         Self::next_square_from_sequence(position, &RAILROAD_SQUARES)
     }
 
-    fn next_u_from(position: MonopolySquare) -> MonopolySquare {
+    fn next_u_from<'a>(position: MonopolySquare) -> &'a MonopolySquare {
         Self::next_square_from_sequence(position, &UTILITY_SQUARES)
     }
 
     fn next_square_from_sequence(
         position: MonopolySquare,
         sequence: &[MonopolySquare],
-    ) -> MonopolySquare {
+    ) -> &MonopolySquare {
         let position_ind = MONOPOLY_SQUARE_IND_MAP
             .iter()
             .position(|square| square == &position)
@@ -150,7 +150,6 @@ impl MonopolySquare {
             .skip(position_ind + 1)
             .find(|square| sequence.contains(square))
             .unwrap() // we are guaranteeed to find one
-            .clone()
     }
 }
 
@@ -161,42 +160,24 @@ enum CommunityChestCard {
     Nothing,
 }
 
-struct CommunityChestDeck {
-    deck: Vec<CommunityChestCard>,
-}
-
-impl CommunityChestDeck {
-    fn new() -> CommunityChestDeck {
-        let mut deck = vec![
-            CommunityChestCard::Nothing,
-            CommunityChestCard::Nothing,
-            CommunityChestCard::Nothing,
-            CommunityChestCard::Nothing,
-            CommunityChestCard::Nothing,
-            CommunityChestCard::Nothing,
-            CommunityChestCard::Nothing,
-            CommunityChestCard::Nothing,
-            CommunityChestCard::Nothing,
-            CommunityChestCard::Nothing,
-            CommunityChestCard::Nothing,
-            CommunityChestCard::Nothing,
-            CommunityChestCard::Nothing,
-            CommunityChestCard::Nothing,
-            CommunityChestCard::AdvanceToGo,
-            CommunityChestCard::GoToJail,
-        ];
-
-        deck.shuffle(&mut rand::thread_rng());
-
-        CommunityChestDeck { deck }
-    }
-
-    fn draw(&mut self) -> CommunityChestCard {
-        let card = self.deck.pop().unwrap(); // constructor ensures it's a full deck
-        self.deck.insert(0, card);
-        card
-    }
-}
+const COMMUNITY_CHEST: [CommunityChestCard; 16] = [
+    CommunityChestCard::Nothing,
+    CommunityChestCard::Nothing,
+    CommunityChestCard::Nothing,
+    CommunityChestCard::Nothing,
+    CommunityChestCard::Nothing,
+    CommunityChestCard::Nothing,
+    CommunityChestCard::Nothing,
+    CommunityChestCard::Nothing,
+    CommunityChestCard::Nothing,
+    CommunityChestCard::Nothing,
+    CommunityChestCard::Nothing,
+    CommunityChestCard::Nothing,
+    CommunityChestCard::Nothing,
+    CommunityChestCard::Nothing,
+    CommunityChestCard::AdvanceToGo,
+    CommunityChestCard::GoToJail,
+];
 
 #[derive(Clone, Copy)]
 enum ChanceCard {
@@ -212,37 +193,39 @@ enum ChanceCard {
     Nothing,
 }
 
-struct ChanceDeck {
-    deck: Vec<ChanceCard>,
+const CHANCE: [ChanceCard; 16] = [
+    ChanceCard::Nothing,
+    ChanceCard::Nothing,
+    ChanceCard::Nothing,
+    ChanceCard::Nothing,
+    ChanceCard::Nothing,
+    ChanceCard::Nothing,
+    ChanceCard::AdvanceToGo,
+    ChanceCard::GoToJail,
+    ChanceCard::GoToC1,
+    ChanceCard::GoToE3,
+    ChanceCard::GoToH2,
+    ChanceCard::GoToR1,
+    ChanceCard::GoToNextR,
+    ChanceCard::GoToNextR,
+    ChanceCard::GoToNextU,
+    ChanceCard::GoBack3Squares,
+];
+
+struct Deck<T> {
+    deck: Vec<T>,
 }
 
-impl ChanceDeck {
-    fn new() -> ChanceDeck {
-        let mut deck = vec![
-            ChanceCard::Nothing,
-            ChanceCard::Nothing,
-            ChanceCard::Nothing,
-            ChanceCard::Nothing,
-            ChanceCard::Nothing,
-            ChanceCard::Nothing,
-            ChanceCard::AdvanceToGo,
-            ChanceCard::GoToJail,
-            ChanceCard::GoToC1,
-            ChanceCard::GoToE3,
-            ChanceCard::GoToH2,
-            ChanceCard::GoToR1,
-            ChanceCard::GoToNextR,
-            ChanceCard::GoToNextR,
-            ChanceCard::GoToNextU,
-            ChanceCard::GoBack3Squares,
-        ];
+impl<T: Clone + Copy> Deck<T> {
+    fn new(cards: &[T]) -> Deck<T> {
+        let mut deck = cards.to_vec();
 
         deck.shuffle(&mut rand::thread_rng());
 
-        ChanceDeck { deck }
+        Deck::<T> { deck }
     }
 
-    fn draw(&mut self) -> ChanceCard {
+    fn draw(&mut self) -> T {
         let card = self.deck.pop().unwrap(); // constructor ensures it's a full deck
         self.deck.insert(0, card);
         card
@@ -271,8 +254,8 @@ struct MonopolyGame<'a> {
     position: MonopolySquare,
     doubles_streak: u64,
     die: &'a mut Die,
-    community_chest: CommunityChestDeck,
-    chance: ChanceDeck,
+    community_chest: Deck<CommunityChestCard>,
+    chance: Deck<ChanceCard>,
     stats: HashMap<MonopolySquare, u64>,
 }
 
@@ -282,8 +265,8 @@ impl MonopolyGame<'_> {
             position: MonopolySquare::GO,
             doubles_streak: 0,
             die: die,
-            community_chest: CommunityChestDeck::new(),
-            chance: ChanceDeck::new(),
+            community_chest: Deck::new(&COMMUNITY_CHEST),
+            chance: Deck::new(&CHANCE),
             stats: HashMap::new(),
         }
     }
@@ -328,8 +311,8 @@ impl MonopolyGame<'_> {
                 ChanceCard::GoToE3 => MonopolySquare::E3,
                 ChanceCard::GoToH2 => MonopolySquare::H2,
                 ChanceCard::GoToR1 => MonopolySquare::R1,
-                ChanceCard::GoToNextR => MonopolySquare::next_r_from(move_position),
-                ChanceCard::GoToNextU => MonopolySquare::next_u_from(move_position),
+                ChanceCard::GoToNextR => *MonopolySquare::next_r_from(move_position),
+                ChanceCard::GoToNextU => *MonopolySquare::next_u_from(move_position),
                 ChanceCard::GoBack3Squares => MonopolySquare::from_ind(move_position_ind - 3), // safe, as all chance squares are > 3
                 ChanceCard::Nothing => move_position,
             }
