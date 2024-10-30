@@ -6,7 +6,7 @@ use rand::seq::SliceRandom;
 
 #[derive(PartialEq, Eq, Hash, Clone, Copy)]
 enum MonopolySquare {
-    GO = 0,
+    Go = 0,
     A1 = 1,
     CC1 = 2,
     A2 = 3,
@@ -16,7 +16,7 @@ enum MonopolySquare {
     CH1 = 7,
     B2 = 8,
     B3 = 9,
-    JAIL = 10,
+    Jail = 10,
     C1 = 11,
     U1 = 12,
     C2 = 13,
@@ -70,7 +70,7 @@ const RAILROAD_SQUARES: [MonopolySquare; 4] = [
 const UTILITY_SQUARES: [MonopolySquare; 2] = [MonopolySquare::U1, MonopolySquare::U2];
 
 const MONOPOLY_SQUARE_IND_MAP: [MonopolySquare; 40] = [
-    MonopolySquare::GO,
+    MonopolySquare::Go,
     MonopolySquare::A1,
     MonopolySquare::CC1,
     MonopolySquare::A2,
@@ -80,7 +80,7 @@ const MONOPOLY_SQUARE_IND_MAP: [MonopolySquare; 40] = [
     MonopolySquare::CH1,
     MonopolySquare::B2,
     MonopolySquare::B3,
-    MonopolySquare::JAIL,
+    MonopolySquare::Jail,
     MonopolySquare::C1,
     MonopolySquare::U1,
     MonopolySquare::C2,
@@ -260,11 +260,11 @@ struct MonopolyGame<'a> {
 }
 
 impl MonopolyGame<'_> {
-    fn new<'a>(die: &'a mut Die) -> MonopolyGame<'a> {
+    fn new(die: &mut Die) -> MonopolyGame<'_> {
         MonopolyGame {
-            position: MonopolySquare::GO,
+            position: MonopolySquare::Go,
             doubles_streak: 0,
-            die: die,
+            die,
             community_chest: Deck::new(&COMMUNITY_CHEST),
             chance: Deck::new(&CHANCE),
             stats: HashMap::new(),
@@ -283,7 +283,7 @@ impl MonopolyGame<'_> {
 
         if self.doubles_streak > 3 {
             self.doubles_streak = 0;
-            self.position = MonopolySquare::JAIL;
+            self.position = MonopolySquare::Jail;
             self.update_stats();
             return;
         }
@@ -292,21 +292,21 @@ impl MonopolyGame<'_> {
         let move_position = MonopolySquare::from_ind(move_position_ind);
 
         if move_position == MonopolySquare::G2J {
-            self.position = MonopolySquare::JAIL;
+            self.position = MonopolySquare::Jail;
         } else if COMMUNITY_CHEST_SQUARES.contains(&move_position) {
             let card = self.community_chest.draw();
 
             self.position = match card {
-                CommunityChestCard::AdvanceToGo => MonopolySquare::GO,
-                CommunityChestCard::GoToJail => MonopolySquare::JAIL,
+                CommunityChestCard::AdvanceToGo => MonopolySquare::Go,
+                CommunityChestCard::GoToJail => MonopolySquare::Jail,
                 CommunityChestCard::Nothing => move_position,
             }
         } else if CHANCE_SQUARES.contains(&move_position) {
             let card = self.chance.draw();
 
             self.position = match card {
-                ChanceCard::AdvanceToGo => MonopolySquare::GO,
-                ChanceCard::GoToJail => MonopolySquare::JAIL,
+                ChanceCard::AdvanceToGo => MonopolySquare::Go,
+                ChanceCard::GoToJail => MonopolySquare::Jail,
                 ChanceCard::GoToC1 => MonopolySquare::C1,
                 ChanceCard::GoToE3 => MonopolySquare::E3,
                 ChanceCard::GoToH2 => MonopolySquare::H2,
