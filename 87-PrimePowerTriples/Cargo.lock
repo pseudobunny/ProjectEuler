@@ -79,15 +79,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "itertools"
-version = "0.13.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "413ee7dfc52ee1a4949ceeb7dbc8a33f2d6c088194d9f922fb8318faf1f01186"
-dependencies = [
- "either",
-]
-
-[[package]]
 name = "libc"
 version = "0.2.161"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -197,7 +188,6 @@ name = "prime_power_triples"
 version = "0.1.0"
 dependencies = [
  "custom_math_utilities",
- "itertools 0.13.0",
 ]
 
 [[package]]
