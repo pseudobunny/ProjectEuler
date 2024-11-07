@@ -1,7 +1,7 @@
-use custom_math_utilities::PartionSolver;
+use custom_math_utilities::PartitionSolver;
 
 fn least_n_for_which_p_divisible_by(d: u64) -> Option<usize> {
-    let mut solver = PartionSolver::new();
+    let mut solver = PartitionSolver::new();
 
     (1..)
         .map(|n| 5 * n + 4) // Simplify by only calculating by Ramanujan congruences

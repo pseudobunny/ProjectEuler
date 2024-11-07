@@ -32,7 +32,7 @@ pub use crate::digit_factorial::digit_factorial;
 pub mod partition;
 pub use crate::partition::partition_approximation;
 pub use crate::partition::prime_partition;
-pub use crate::partition::PartionSolver;
+pub use crate::partition::PartitionSolver;
 
 pub mod sqrt_decimal_expansion;
 pub use crate::sqrt_decimal_expansion::sqrt_decimal_expansion;

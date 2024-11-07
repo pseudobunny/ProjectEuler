@@ -13,13 +13,13 @@ fn generate_k(index: u32) -> i64 {
     ((index + 1) / 2) as i64 * (-1_i64).pow(index - 1)
 }
 
-pub struct PartionSolver {
+pub struct PartitionSolver {
     pub partitions: Vec<BigInt>,
 }
 
-impl PartionSolver {
-    pub fn new() -> PartionSolver {
-        PartionSolver {
+impl PartitionSolver {
+    pub fn new() -> PartitionSolver {
+        PartitionSolver {
             partitions: vec![num::one()],
         }
     }
@@ -86,7 +86,7 @@ mod tests {
 
     #[test]
     fn test_partition() {
-        let mut solver = PartionSolver::new();
+        let mut solver = PartitionSolver::new();
 
         let exact_partitions = vec![
             1, 1, 2, 3, 5, 7, 11, 15, 22, 30, 42, 56, 77, 101, 135, 176, 231, 297, 385, 490, 627,

@@ -1,8 +1,8 @@
-use custom_math_utilities::PartionSolver;
+use custom_math_utilities::PartitionSolver;
 use num::BigInt;
 
 fn number_of_ways_to_sum(n: usize) -> BigInt {
-    PartionSolver::new().partition(n) - 1
+    PartitionSolver::new().partition(n) - 1
 }
 
 fn main() {
