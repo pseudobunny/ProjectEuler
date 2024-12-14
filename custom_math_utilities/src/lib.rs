@@ -26,8 +26,9 @@ pub use crate::convergents_list::ConvergentsList;
 pub mod sqrt_continuous_fraction;
 pub use crate::sqrt_continuous_fraction::SqrtContinuousFractionCoefficients;
 
-pub mod digit_factorial;
-pub use crate::digit_factorial::digit_factorial;
+pub mod digit_functions;
+pub use crate::digit_functions::digit_factorial;
+pub use crate::digit_functions::digit_square;
 
 pub mod partition;
 pub use crate::partition::partition_approximation;

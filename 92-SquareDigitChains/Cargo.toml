@@ -1,0 +1,8 @@
+[package]
+name = "square_digit_chains"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+custom_math_utilities = { path = "../custom_math_utilities"}
+memoize = "0.4.2"
